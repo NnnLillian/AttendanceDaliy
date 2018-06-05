@@ -355,9 +355,11 @@ public class RestfulController {
         fname = "" + fname.hashCode() + postfix;
 
         try {
-            URL res = Thread.currentThread().getContextClassLoader().getResource("imgs/");
-            String fPath = res.getPath() + fname;
-            File f =  new File(fPath);
+//            URL res = Thread.currentThread().getContextClassLoader().getResource("imgs/");
+//            String fPath = res.getPath() + fname;
+//            File f =  new File(fPath);
+
+            File f =  new File("./imgs/"+fname);
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(file.getBytes());
             fos.close();
