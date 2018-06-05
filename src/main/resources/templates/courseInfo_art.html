@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 编码格式 -->
+    <meta charset="utf-8">
+    <!-- 针对于IE，因为bootstrap不支持IE古老的渲染模式，为了让IE运行最近的渲染模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 设置响应式布局，获取当前设备物理宽度，再根据设备物理宽度来设置网页宽度，缩放比为1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Lillian">
+    <link rel="icon" href="/favicon-sy.ico">
+
+    <title>课程类别-美术</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/app/courseInfo.css" rel="stylesheet">
+    <link href="/css/sweetalert.css" rel="stylesheet">
+    <link href="/css/bootstrap-select.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="/js/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="/js/bootstrap-select.min.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/js/ie-emulation-modes-warning.js"></script>
+    <script src="/js/sweetalert.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">课程考勤</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a th:href="@{'/course/getAllcourseSort'}">课程信息</a></li>
+                <li><a th:href="@{'/student/getAllStudentInfo'}">学生信息</a></li>
+                <li><a href="uploadTable.html">签到表上传</a></li>
+                <li><a href="#">帮助</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="nav nav-header">课程类型<span class="sr-only">(current)</span></li>
+                <li th:each="item:${sortInfos}"><a th:href="@{'/course/getCourseBySort?cSortId='+${item.cSortId}}"
+                                                   th:text="${item.cSortName}">美术</a></li>
+            <hr>
+                <li class="nav nav-header" style="padding-top: 10px;">删除课程信息</li>
+                <li data-toggle="modal" data-target="#DeleteModal">
+                    <a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>课程</a>
+                </li>
+                <!--<li data-toggle="modal" data-target="#Modal">-->
+                    <!--<a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>课程</a></li>-->
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header" th:text="${cSortName}"></h1>
+
+            <div class="row placeholders">
+                <div class="placeholder" th:each="item:${courseInfos}">
+                    <div class="placeholder1">
+                        <!--<img src="../imgs/childPainting.jpg" class="img-responsive" alt="少儿绘画">-->
+                        <img th:src="${item.cImgUrl}" class="img-responsive" alt="少儿绘画">
+                        <div class="placeholder_caption">
+                            <h3 class="placeholder_caption_a"></h3>
+                            <h3 class="placeholder_caption_p" th:text="${item.cName}"></h3>
+                            <a class="placeholder_caption_a"
+                               th:href="@{'/course/getCourseBySortForStudent?cSortId='+${item.cSortId}+'&cId='+${item.cId}}"></a>
+                        </div>
+                    </div>
+                    <h4 th:text="${item.cName}"></h4>
+                    <!--<span class="text-muted">Something else</span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--删除课程模态框-->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="DeleteModalLabel">删除课程</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="DeletecName" class="control-label">课程名称</label>
+                        <select class="form-control selectpicker" id="DeletecName">
+                            <option th:each="item:${courseInfos}"><a th:text="${item.cName}"></a></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="deleteCourse">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--删除课程-->
+<script th:inline="javascript">
+    $(function () {
+        $('#deleteCourse').click(function () {
+            var cName = $('#DeletecName').val();
+            var mydata = '{"cName":"' + cName + '"}';
+            console.log(cName);
+            $.ajax({
+                type: 'DELETE',
+                data: mydata,
+                // contentType: "application/json;charset=UTF-8",
+                url: "/rest-api/deleteCourse/"+ cName,
+                success: function () {
+                    swal({
+                        title: "删除成功！",
+                        text: "请刷新页面",
+                        timer: 2000,
+                        icon: "success",
+                    });
+                    $("#DeleteModal").modal("hide");
+                },
+                error: function () {
+                    swal({
+                        title: "删除失败！",
+                        text: "该课程下还有学生!",
+                        timer: 2000,
+                        icon: "error",
+                        // button: "我知道了!",
+                    });
+                },
+            })
+        });
+    });
+</script>
+
+</body>
+</html>

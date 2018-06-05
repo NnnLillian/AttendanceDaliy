@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CourseInfoMapper">
+    <insert id="insert">
+        INSERT INTO courseinfo(cSortId, cName, cImgUrl) VALUES (#{cSortId}, #{cName},#{cImgUrl})
+    </insert>
+
+    <select id="selectCourseInfoBySortId" resultType="com.example.demo.entity.CourseInfo">
+        SELECT *
+        FROM courseinfo WHERE cSortId = #{cSortId}
+    </select>
+    
+    <select id="selectBycImgUrl" resultType="com.example.demo.entity.CourseInfo">
+        SELECT *
+        FROM courseinfo WHERE cImgUrl = #{cImgUrl}
+    </select>
+
+    <select id="selectCourseAll" resultType="com.example.demo.entity.CourseInfo">
+        SELECT *
+        FROM courseinfo
+    </select>
+    <!--<select id="selectOne" resultType="com.example.demo.entity.CourseInfo">-->
+        <!--SELECT *-->
+        <!--FROM courseinfo-->
+        <!--WHERE cId = #{cId} or cName = #{cName}-->
+    <!--</select>-->
+</mapper>

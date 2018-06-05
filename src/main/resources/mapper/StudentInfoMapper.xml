@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.StudentInfoMapper">
+    <insert id="insertStudentInfo">
+        INSERT INTO studentinfo(uId, uName, uConnect, comment, uFingerId) VALUES (#{uId}, #{uName},#{uConnect},#{comment},#{uFingerId})
+    </insert>
+
+    <select id="selectAllStudent" resultType="com.example.demo.entity.StudentInfo">
+        SELECT *
+        FROM studentinfo ORDER BY uId;
+    </select>
+
+    <select id="orderStudentByCourseNumber" resultType="com.example.demo.entity.relationTableSearchResultItem">
+
+        SELECT  studentinfo.uId AS uId, studentinfo.uFingerId AS uFingerId,
+        studentinfo.uName AS uName, studentinfo.uConnect AS uConnect,
+        studentinfo.comment AS comment, s.cNumberEd AS cNumberEd,
+        s.cNumberLast AS cNumberLast, s.overDate AS overDate
+        FROM  studentinfo INNER JOIN srelationc s ON studentinfo.uId = s.uId
+        WHERE s.cId = #{cId}
+        ORDER BY ${sort} ${order} LIMIT ${offset},${limit};
+
+    </select>
+
+    <select id="selectOneStudent" resultType="com.example.demo.entity.StudentInfo">
+        SELECT *
+        FROM studentinfo
+        WHERE uName = #{name} and uConnect = #{connect}
+    </select>
+
+    <select id="selectStudentById" resultType="com.example.demo.entity.StudentInfo">
+        SELECT *
+        FROM studentinfo
+        WHERE uId = #{uId}
+    </select>
+
+    <delete id="deleteOneStudent">
+        DELETE
+        FROM studentinfo
+        WHERE uId = #{uId}
+    </delete>
+
+    <update id="updateOneStudent">
+        UPDATE studentinfo SET uName = #{uName}, uConnect = #{uConnect}, uFingerId = #{uFingerId} WHERE uId = #{uId}
+    </update>
+
+    <update id="updateOneStudentFingerId">
+        UPDATE studentinfo SET uFingerId = #{uFingerId} WHERE uId = #{uId};
+    </update>
+
+    <update id="updateOneStudentConnect">
+        UPDATE studentinfo SET uConnect = #{uConnect} WHERE uId = #{uId};
+    </update>
+
+    <update id="updateOneStudentComment">
+        UPDATE studentinfo SET comment = #{comment} WHERE uId = #{uId};
+    </update>
+
+    <select id="searchStudent" resultType="com.example.demo.entity.StudentInfo">
+        select *
+        from studentinfo
+        where concat(uId,uName,uConnect) like #{keyword} LIMIT #{limit}, #{count}
+    </select>
+
+    <select id="countAllStudent" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM studentinfo;
+    </select>
+</mapper>

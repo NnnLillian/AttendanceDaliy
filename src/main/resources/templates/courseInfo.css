@@ -1,0 +1,271 @@
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 0px 20px 20px 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #777;
+}
+
+.nav-sidebar > li >a{
+  color: #777777;
+  text-decoration: none;
+}
+.nav-header{
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+  /*Try*/
+  overflow: hidden;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+  /*Try，这样就失去了响应式*/
+  float: left;
+  margin-left:30px;
+  margin-right:30px; 
+}
+.placeholder1 {
+  border: 1px solid #f5f5f5;
+  width:200px;
+  height:200px;
+  background:#333;
+  border-radius: 50%;
+  position:relative;
+  margin:0 auto;
+  margin-bottom: 20px;
+  /*要不要加阴影啊*/
+  /*box-shadow: 4px 4px 8px #888888;*/
+  box-sizing:border-box;
+  -webkit-transition:all .4s ease-in-out;
+  -moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  -ms-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+  overflow:hidden;
+}
+.placeholder1 .img-responsive {
+  display: block;
+  width: 100%;
+  position:relative;
+  -webkit-transition:all .4s ease-in-out;
+  -moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  -ms-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+  opacity:1;
+  overflow:hidden;
+}
+.placeholder1:hover .img-responsive{
+  position:relative;
+  -webkit-transform:scale(1.1);
+  -moz-transform:scale(1.1);
+  -o-transform:scale(1.1);
+  -ms-transform:scale(1.1);
+  transform:scale(1.1);
+  opacity:.6;
+} 
+/*可以不要的部分了*/
+.placeholder1 .placeholder_caption{
+  /*字体颜色*/
+  color:#fff;
+  padding:0;
+  margin:0;
+  -moz-backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  -webkit-transition:all .4s ease-in-out;
+  -moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  -ms-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+  overflow:hidden;
+} 
+.placeholder1 .placeholder_caption::before,.placeholder1 .placeholder_caption::after{
+  position:absolute;
+  content:'';
+  opacity:0;
+  -webkit-transition:opacity 0.4s,-webkit-transform .4s;
+  -moz-transition:opacity 0.4s,-moz-transform .4s;
+  -o-transition:opacity 0.4s,-o-transform .4s;
+  transition:opacity 0.4s,transform .4s;
+} 
+/*横向圈圈*/
+.placeholder1 .placeholder_caption::before{
+  top:10%;
+  right:10%;
+  bottom:10%;
+  left:10%;
+  border:1px solid #fff;
+  border-radius: 50%;
+  -webkit-transform:scale(0,1);
+  -moz-transform:scale(0,1);
+  -o-transform:scale(0,1);
+  transform:scale(0,1);
+  -webkit-transform-origin:50% 50%;
+  -moz-transform-origin:50% 50%;
+  -o-transform-origin:50% 50%;
+  transform-origin:50% 50%;
+} 
+/*纵向圈圈*/
+.placeholder1 .placeholder_caption::after{
+  top:10%;
+  right:10%;
+  bottom:10%;
+  left:10%;
+  border:1px solid #fff;
+  border-radius: 50%;
+  -webkit-transform:scale(1,0);
+  -moz-transform:scale(1,0);
+  -o-transform:scale(1,0);
+  transform:scale(1,0);
+  -webkit-transform-origin:50% 50%;
+  -moz-transform-origin:50% 50%;
+  -o-transform-origin:50% 50%;
+  transform-origin:50% 50%;
+} 
+.placeholder1:hover .placeholder_caption::before,.placeholder1:hover .placeholder_caption::after{
+  opacity:1;
+  -webkit-transform:scale(1);
+  -moz-transform:scale(1);
+  -o-transform:scale(1);
+  transform:scale(1);
+} 
+.placeholder1 .placeholder_caption,.placeholder1 .placeholder_caption > a{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  -webkit-transition:all .4s ease-in-out;
+  -moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  -ms-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+  overflow:hidden;
+  z-index:1000
+} 
+.placeholder1 .placeholder_caption_h{
+  font-size:1.3em;
+  font-weight:700;
+  text-align:center;
+  width:80%;
+  position:absolute;
+  top:20%;
+  left:10%;
+  -webkit-transition:all .5s ease-in-out;
+  -moz-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out;
+  -ms-transition:all .5s ease-in-out;
+  transition:all .5s ease-in-out;
+  overflow:hidden;
+  opacity:1
+} 
+.placeholder1 .placeholder_caption_p{
+  font-size:1.3em;
+  text-align:center;
+  width:80%;
+  position:absolute;
+  top:50%;
+  left:10%;
+  -webkit-transition:all .4s ease-in-out;-moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  -ms-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+  overflow:hidden;
+  opacity:0
+} 
+.placeholder1:hover .placeholder_caption_p{
+  top:50%;
+  opacity:1;
+} 

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- 编码格式 -->
+    <meta charset="utf-8">
+    <!-- 针对于IE，因为bootstrap不支持IE古老的渲染模式，为了让IE运行最近的渲染模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 设置响应式布局，获取当前设备物理宽度，再根据设备物理宽度来设置网页宽度，缩放比为1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Lillian">
+    <link rel="icon" href="../../favicon-sy.ico">
+
+    <title>上传签到表</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="courseInfo.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">课程考勤</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="courseSortInfo.html">课程信息</a></li>
+            <li><a href="allStuInfo.html">学生信息</a></li>
+            <li class="active"><a href="#">签到表上传</a></li>
+            <li><a href="#">帮助</a></li>
+          </ul>
+          <!-- 并不需要的一个查询 -->
+          <!-- <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="查找...">
+          </form> -->
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="nav nav-header">课程类型<span class="sr-only">(current)</span></li>
+            <li class="active"><a href="courseInfo_art.html">美术</a></li>
+            <li><a href="">书法</a></li>
+            <li><a href="">舞蹈</a></li>
+            <li><a href="">武术</a></li>
+            <li><a href="">口才</a></li>
+            <li><a href="">作文</a></li>
+            <li><a href="">跆拳道</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>课程名称</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>少儿绘画</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>美术基础</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>水墨缘</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>DIY手工坊</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>小小时装设计班</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>油画工作室</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>中老年书画班</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
+                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div align="center">
+              <button type="button" class="btn btn-default">确认上传</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
