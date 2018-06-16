@@ -173,6 +173,19 @@
     selections = [];
 
     function initTable() {
+        function NameFormatter(value, row, index) {
+            if (value < 4){
+            return [
+                '<span style="color: red; font-weight:bold">'+value+'</span>'
+            ].join('');
+            }
+            else {
+                return [
+                    '<span>'+value+'</span>'
+                ].join('');
+            }
+        };
+
         $courseTable.bootstrapTable({
             height: getHeight(),
             url: '/rest-api/allStudentsByCourse/' + [[${cId}]],
@@ -214,6 +227,7 @@
                 field: 'cNumberLast',
                 title: '剩余课时',
                 sortable: true,
+                formatter: NameFormatter
                 // validate: function (value) {
                 //     value = $.trim(value);
                 //     if (value < 4){

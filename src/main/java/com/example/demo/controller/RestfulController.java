@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.*;
+import com.example.demo.mapper.RelationsMapper;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -415,6 +416,7 @@ public class RestfulController {
         }
         return 0;
     }
+
 
 
 }

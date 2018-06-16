@@ -20,6 +20,9 @@ public interface RelationsMapper {
     @Select("SELECT * FROM srelationc WHERE uId = #{uId} AND cId = #{cId};")
     Relations selectRelationBycId_uId(@Param("uId") int uId, @Param("cId") int cId);
 
+    @Select("SELECT * FROM srelationc WHERE cNumberLast < 4")
+    List<Relations> selectStudentIdWithLittleCourse();
+
     @Delete("DELETE FROM srelationc WHERE uId = #{uId} AND cId = #{cId};")
     int deleteRelationInfoBycId_uId(@Param("uId") int uId, @Param("cId") int cId);
 
