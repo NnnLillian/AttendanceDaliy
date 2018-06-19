@@ -7,6 +7,7 @@ import com.example.demo.mapper.RelationsMapper;
 import com.example.demo.mapper.StudentInfoMapper;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.impl.CourseServiceimpl;
+import com.example.demo.service.impl.StudentServiceimpl;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,8 @@ public class DemoApplicationTests {
     private AttendanceMapper attMapper;
     @Autowired
     private CourseInfoMapper couMapper;
+    @Autowired
+    private StudentServiceimpl stuService;
 
 //    @Test
 //    public void CourseCountUpdateTest() {
@@ -160,6 +163,70 @@ public class DemoApplicationTests {
     public void orderStudent(){
         List<relationTableSearchResultItem> rod = stuMapper.orderStudentByCourseNumber(1,"cNumberLast", "desc", 0,10);
         System.out.println(rod.size());
+    }
+
+    @Test
+    public void selectStudentWithNullCourse(){
+        List<Relations> r = rMapper.selectStudentIdWithLittleCourse();
+        for(Relations s : r) {
+            System.out.println(s.getuId());
+            int cId = s.getcId();
+            CourseInfo course = couMapper.selectCourseInfoById(cId);
+            String cName = course.getcName();
+            int uId = s.getuId();
+            StudentInfo a = stuMapper.selectStudentById(uId);
+            String uConnect = a.getuConnect();
+            stuService.sendMessage(cName,uConnect);
+
+        }
+
+    }
+
+    @Test
+    public void sendMessage(){
+
+        final String url="http://47.98.207.80:8888/sms.aspx";
+
+        try {
+
+            URL realURL= new URL(url);
+            // 打开连接
+            URLConnection conn = realURL.openConnection();
+            // 设置请求头部
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 实现写字符流的功能
+            PrintWriter out=new PrintWriter(conn.getOutputStream());
+            //  action=send&userid=12&account=账号&password=密码&mobile=15023239810,13527576163&content=内容&sendTime=&extno=
+            String query="";
+            query+="action=send" + "&";
+            query+="userid=262" + "&";
+            query+="account=艺术培训" + "&";
+            query+="password=123456" + "&";
+            query+="mobile=15074808385" + "&";
+            query+="content=成功" + "&";
+            query+="sendTime=" + "&";
+            query+="extno=";
+
+            out.write(query);
+            out.flush();
+            // 接收响应数据
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            out.close();
+            in.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
