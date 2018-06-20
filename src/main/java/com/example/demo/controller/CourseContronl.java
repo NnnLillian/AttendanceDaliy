@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -88,4 +89,33 @@ public class CourseContronl {
 
         }
     }
+
+
+    @GetMapping("/uploadFile")
+    public String decreaseCourseNumber(@RequestParam("cSortId") int cSortId, Model model){
+
+        List<CourseInfo> courseInfo;
+        CourseSort cSort;
+
+        cSort = courseService.selectCourseSortById(cSortId);
+
+        if (null == cSort) {
+            // ...
+            System.out.println("Error");
+            return "error";
+        }else {
+
+            courseInfo = courseService.selectCourseInfoBySortId(cSortId);
+
+            model.addAttribute("courseInfos", courseInfo);
+            model.addAttribute("cSortId", cSortId);
+            model.addAttribute("cSortName", cSort.getcSortName());
+            List<CourseSort> courseSorts = courseService.selectAll();
+            model.addAttribute("sortInfos", courseSorts);
+
+            return "uploadTable";
+
+        }
+    }
+
 }

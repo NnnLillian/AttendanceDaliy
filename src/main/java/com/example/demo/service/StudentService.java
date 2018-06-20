@@ -49,4 +49,8 @@ public interface StudentService {
     int deleteRelationInfoBycId_uId(int uId, int cId);
 
     List<relationTableSearchResultItem> orderStudentByCourseNumber(int cId, String sort, String order, int offset, int limit);
+
+    void sendMessage(String cName, String uConnect);
+
+
 }

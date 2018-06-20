@@ -348,7 +348,7 @@ public class RestfulController {
     }
     //  增加课程图片
     @RequestMapping(value = "/imgUpload", method = RequestMethod.POST)
-    String uploadImage(@RequestParam("image")MultipartFile file) {
+    public String uploadImage(@RequestParam("image")MultipartFile file) {
 
         String fname=file.getOriginalFilename();
         String postfix=fname.substring(fname.lastIndexOf('.'));
@@ -416,6 +416,39 @@ public class RestfulController {
         }
         return 0;
     }
+
+    //  上传签到表
+    @RequestMapping(value = "/csvUpload", method = RequestMethod.POST)
+    public String uploadAttLog(@RequestParam("IMPORTAttLog")MultipartFile file) {
+
+        String fileName = file.getOriginalFilename();
+        String postfix=fileName.substring(fileName.lastIndexOf('.'));
+        fileName += System.currentTimeMillis();
+        fileName = "" + fileName.hashCode() + postfix;
+
+        try {
+
+            File f =  new File("./folders/"+fileName);
+//            InputStream input = null ;    // 准备好一个输入的对象
+//            input = new FileInputStream(f)  ;    // 通过对象多态性，进行实例化
+//            byte b[] = new byte[1024] ;        // 所有的内容都读到此数组之中
+//            input.read(b) ;        // 读取内容   网络编程中 read 方法会阻塞
+//            input.close() ;                        // 关闭输出流
+//            System.out.println("内容为：" + new String(b)) ;
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(file.getBytes());
+            fos.close();
+            return "/folders/"+fileName;
+
+        }catch (IOException e) {
+            return "-1";
+        }
+    }
+
+    //操作上传文件
+//    @RequestMapping(value = "/fileUpload", method = RequestMethod.PUT)
+//    public int changeRelation(@PathVariable("cId") int cId,
+//                              @RequestParam(""))
 
 
 

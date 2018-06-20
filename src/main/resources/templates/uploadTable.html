@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <!-- 编码格式 -->
     <meta charset="utf-8">
@@ -10,22 +10,22 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="Lillian">
-    <link rel="icon" href="../../favicon-sy.ico">
+    <link rel="icon" href="/favicon-sy.ico">
 
     <title>上传签到表</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="courseInfo.css" rel="stylesheet">
+    <link href="/css/app/courseInfo.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!--[if lt IE 9]><script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -54,10 +54,6 @@
             <li class="active"><a href="#">签到表上传</a></li>
             <li><a href="#">帮助</a></li>
           </ul>
-          <!-- 并不需要的一个查询 -->
-          <!-- <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="查找...">
-          </form> -->
         </div>
       </div>
     </nav>
@@ -67,13 +63,8 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="nav nav-header">课程类型<span class="sr-only">(current)</span></li>
-            <li class="active"><a href="courseInfo_art.html">美术</a></li>
-            <li><a href="">书法</a></li>
-            <li><a href="">舞蹈</a></li>
-            <li><a href="">武术</a></li>
-            <li><a href="">口才</a></li>
-            <li><a href="">作文</a></li>
-            <li><a href="">跆拳道</a></li>
+            <li th:each="item:${sortInfos}"><a th:href="@{'/course/uploadFile?cSortId='+${item.cSortId}}"
+                                               th:text="${item.cSortName}">美术</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -81,55 +72,13 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>课程名称</th>
-                  <th>操作</th>
+                  <th><h3>课程名称</h3></th>
+                  <th><h3>操作</h3></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody th:each="item:${courseInfos}" >
                 <tr>
-                  <td>少儿绘画</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>美术基础</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>水墨缘</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>DIY手工坊</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>小小时装设计班</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>油画工作室</td>
-                  <td>
-                    <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
-                    <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>中老年书画班</td>
+                  <td  th:text="${item.cName}">少儿绘画</td>
                   <td>
                     <button type="button" class="btn btn-xs btn-default"><a>上传</a></button>
                     <button type="button" class="btn btn-xs btn-default"><a>取消</a></button>
@@ -149,11 +98,11 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+    <script src="/js/bootstrap.min.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script src="/js/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

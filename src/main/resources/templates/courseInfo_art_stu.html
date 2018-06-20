@@ -27,6 +27,7 @@
     <link href="/css/bootstrap-table.min.css" rel="stylesheet"/>
     <link href="/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="/css/sweetalert.css" rel="stylesheet">
+    <link href="/css/jquery.fileupload.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]>
@@ -51,6 +52,13 @@
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
     <script src="/js/typeahead.bundle.min.js"></script>
     <script src="/js/sweetalert.min.js"></script>
+    <script src="/js/jquery.ui.widget.js"></script>
+
+    <link rel="stylesheet" href="/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="/css/jquery.fileupload-ui.css">
+    <script src="/js/jquery.fileupload.js"></script>
+    <script src="/js/jquery.fileupload-process.js"></script>
+    <script src="/js/jquery.iframe-transport.js"></script>
 </head>
 
 <body>
@@ -98,21 +106,22 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" th:each="item:${courseInfo}">
-            <h2 class="sub-header" th:text="${item.getcName()}"></h2>
-            <div class="table-responsive">
+                <h2 class="sub-header" th:text="${item.getcName()}"></h2>
                 <div id="toolbar" class="btn-group">
                     <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal"
                             data-target="#ModalStu">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                     </button>
+                    <button id="btn_import" type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#ModalImport">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>上传数据
+                    </button>
                     <button id="btn_delete" type="button" class="btn btn-default" disabled="">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
                     </button>
                 </div>
-            </div>
             <table class="table table-striped" style="margin-bottom: 0px;" id="courseTable">
             </table>
-
         </div>
 
         <!--添加学生模态框-->
@@ -152,6 +161,66 @@
                 </div>
             </div>
         </div>
+
+
+        <!--上传数据模态框-->
+        <div class="modal fade" id="ModalImport" tabindex="-1" role="dialog" aria-labelledby="ModalStuLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="ModalImportLabel">上传数据</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row fileupload-buttonbar" style="padding:15px;">
+                                <label for="IMPORTattLog" class="control-label">上传签到表</label>
+                                <div class="thumbnail">
+                                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
+                                         aria-valuemax="100" aria-valuenow="0" style="margin-top: 20px;margin-bottom: 10px;">
+                                        <div id="progressAttLog" class="progress-bar progress-bar-striped active"
+                                             style="width:0%;"></div>
+                                    </div>
+                                    <div class="caption" align="center">
+                                      <span id="uploadAttLog" class="btn btn-primary fileinput-button">
+                                          <span>选择</span>
+                                          <input type="file" id="IMPORTattLog" name="IMPORTattLog" multiple>
+                                      </span>
+                                        <a id="cancleUploadAttLog" href="javascript:void(0)" class="btn btn-warning"
+                                           role="button"
+                                           style="display:none">删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row fileupload-buttonbar" style="padding:15px;">
+                                <label for="IMPORTstuMsg" class="control-label">上传学生信息表</label>
+                                <div class="thumbnail">
+                                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
+                                         aria-valuemax="100" aria-valuenow="0" style="margin-top: 20px;margin-bottom: 10px;">
+                                        <div id="progressStuMsg" class="progress-bar progress-bar-striped active"
+                                             style="width:0%;"></div>
+                                    </div>
+                                    <div class="caption" align="center">
+                                      <span id="uploadStuMsg" class="btn btn-primary fileinput-button">
+                                          <span>选择文件</span>
+                                          <input type="file" id="IMPORTstuMsg" multiple>
+                                      </span>
+                                        <a id="cancleUploadStuMsg" href="javascript:void(0)" class="btn btn-warning"
+                                           role="button"
+                                           style="display:none">删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" id="importFile">确认上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!--Handlebars-->
@@ -167,6 +236,7 @@
     <script src="/js/handlebars-v4.0.11.js"></script>
     <script src="/js/app/project.js"></script>
 
+<!--载入学生信息表-->
 <script th:inline="javascript">
     var $btn_delete = $('#btn_delete');
     var $courseTable = $('#courseTable');
@@ -376,6 +446,7 @@
     $(function () {
         var scripts = [
                 '/js/bootstrap-table.min.js',
+                '/js/bootstrap-table-locale-all.min.js',
                 '/js/extensions/export/bootstrap-table-export.min.js',
                 '/js/tableExport.min.js',
                 '/js/extensions/editable/bootstrap-table-editable.js',
@@ -476,6 +547,103 @@
     });
 </script>
 
+<script th:inline="javascript">
+    $(function () {
+        var attLogFile;
+        $('#importFile').click(function () {
+            var mydata = '{"mydatafile":"' + attLogFile + '"}';
+            console.log(attLogFile);
+            $.ajax({
+                type: 'PUT',
+                data: mydata,
+                // data:$('#courseForm').serialize(),
+                contentType: "application/json;charset=UTF-8",
+                // url: "/rest-api/importFile",
+                success: function () {
+                    swal({
+                        title: "添加成功！",
+                        text: "请刷新!",
+                        icon: "success",
+                        button: "我知道了!",
+                    });
+                    $("#Modal").modal("hide");
+                },
+                error: function () {
+                    swal({
+                        title: "添加失败！",
+                        text: "没有上传到后台!",
+                        icon: "error",
+                        button: "我知道了!",
+                    });
+                },
+            })
+        });
+
+        $("#IMPORTattLog").fileupload({
+            url: '/rest-api/csvUpload',
+            dataType: 'json',
+            sequentialUploads: true,
+            // acceptFileTypes : /(gif|jpe?g|png|jpg)$/i,//验证格式
+            maxNumberOfFiles : 1,//最大上传文件数目
+            maxFileSize : 5000000, // 文件上限5MB
+            minFileSize : 100,//文件下限  100b
+            messages : {//文件错误信息
+                acceptFileTypes : '文件类型不匹配',
+                maxFileSize : '文件过大',
+                minFileSize : '文件过小'
+            }
+        }).bind('fileuploadprogress', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#progressAttLog").css('width',progress + '%');
+            $("#progressAttLog").html(progress + '%');
+            console.log("hey!")
+        }).bind('fileuploadadd', function (e, data) {
+            attLogFile = "/folders/"+ data.files[0].name
+            console.log("attLogFile:" + attLogFile);
+            $("#uploadAttLog").css({display:"none"});
+            $("#cancleUploadAttLog").css({display:""});
+        }).bind('fileuploadfail', function(e, data){
+            console.log("failed!")
+            console.log(e)
+            console.log(data);
+            $("#progressAttLog").css('width',0 + '%');
+            $("#progressAttLog").html(0 + '%');
+            $("#uploadAttLog").css({display:""});
+            $("#cancleUploadAttLog").css({display:"none"});
+            swal({
+                title: "上传失败！",
+                // imageUrl: "imgs/imgTips.png",
+                text: "第一步上传失败",
+                // icon: "error",
+                button: "我知道了!",
+            });
+        });
+
+
+        $("#Modal").on('show.bs.modal', function () {
+            console.log("cleaning")
+            $("#progressAttLog").css('width',0 + '%');
+            $("#progressAttLog").html(0 + '%');
+            // $("#show").attr("src","/imgs/index.png");
+            $("#uploadAttLog").css({display:""});
+            $("#cancleUploadAttLog").css({display:"none"});
+
+        });
+
+        $("#cancleUploadAttLog").click(function () {
+
+            $("#progressAttLog").css('width',0 + '%');
+            $("#progress").html(0 + '%');
+            $("#uploadAttLog").css({display:""});
+            $("#cancleUploadAttLog").css({display:"none"});
+        });
+    });
+</script>
+
+<bean name="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="defaultEncoding" value="UTF-8"></property>
+</bean>
 
 </body>
 </html>
