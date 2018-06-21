@@ -9,6 +9,12 @@ import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.List;
 
@@ -145,6 +151,53 @@ public class StudentServiceimpl implements StudentService{
     @Override
     public List<relationTableSearchResultItem> orderStudentByCourseNumber(int cId, String sort, String order, int offset, int limit) {
         return studentInfoMapper.orderStudentByCourseNumber(cId, sort,order,offset,limit);
+    }
+
+    @Override
+    public void sendMessage(String cName, String uConnect){
+
+        final String url="http://47.98.207.80:8888/sms.aspx";
+
+        try {
+
+            URL realURL= new URL(url);
+            // 打开连接
+            URLConnection conn = realURL.openConnection();
+            // 设置请求头部
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 实现写字符流的功能
+            PrintWriter out=new PrintWriter(conn.getOutputStream());
+            //  action=send&userid=12&account=账号&password=密码&mobile=15023239810,13527576163&content=内容&sendTime=&extno=
+            String query="";
+            query+="action=send" + "&";
+            query+="userid=262" + "&";
+            query+="account=艺术培训" + "&";
+            query+="password=123456" + "&";
+            query+="mobile="+ uConnect + "&";
+            query+="content=【艺术培训】您好，您的"+ cName + "课时已经不足3节，请尽快补交学费。" + "&";
+            query+="sendTime=" + "&";
+            query+="extno=";
+
+            out.write(query);
+            out.flush();
+            // 接收响应数据
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            out.close();
+            in.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

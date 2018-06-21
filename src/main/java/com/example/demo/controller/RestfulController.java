@@ -4,6 +4,9 @@ import com.example.demo.entity.*;
 import com.example.demo.mapper.RelationsMapper;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.StudentService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +14,14 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Resource;
 import java.io.*;
+
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/rest-api")
@@ -356,17 +362,20 @@ public class RestfulController {
         fname = "" + fname.hashCode() + postfix;
 
         try {
-//            URL res = Thread.currentThread().getContextClassLoader().getResource("imgs/");
-//            String fPath = res.getPath() + fname;
-//            File f =  new File(fPath);
+            URL classPath = Thread.currentThread().getContextClassLoader().getResource("imgs/");
+            String fPath = classPath.getPath() + fname;
+            File f =  new File(fPath);
 
-            File f =  new File("./imgs/"+fname);
+//            File f =  new File("./imgs/"+fname);
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(file.getBytes());
             fos.close();
-            return "/imgs/"+fname;
 
+//            return JSONObject.fromObject("/imgs/"+fname);
+
+            return "{\"name\":\"/imgs/"+fname+"\"}";
         }catch (IOException e) {
+//            return JSONObject.fromObject("-1");
             return "-1";
         }
     }
@@ -417,9 +426,9 @@ public class RestfulController {
         return 0;
     }
 
-    //  上传签到表
-    @RequestMapping(value = "/csvUpload", method = RequestMethod.POST)
-    public String uploadAttLog(@RequestParam("IMPORTAttLog")MultipartFile file) {
+    //  上传签到数据表，返回文件路径URL
+    @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+    public String uploadAttLog(@RequestParam("IMPORTattLog")MultipartFile file) {
 
         String fileName = file.getOriginalFilename();
         String postfix=fileName.substring(fileName.lastIndexOf('.'));
@@ -428,16 +437,10 @@ public class RestfulController {
 
         try {
 
-            File f =  new File("./folders/"+fileName);
-//            InputStream input = null ;    // 准备好一个输入的对象
-//            input = new FileInputStream(f)  ;    // 通过对象多态性，进行实例化
-//            byte b[] = new byte[1024] ;        // 所有的内容都读到此数组之中
-//            input.read(b) ;        // 读取内容   网络编程中 read 方法会阻塞
-//            input.close() ;                        // 关闭输出流
-//            System.out.println("内容为：" + new String(b)) ;
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(file.getBytes());
-            fos.close();
+            File fs =  new File("./folders/"+fileName);
+            FileOutputStream foss = new FileOutputStream(fs);
+            foss.write(file.getBytes());
+            foss.close();
             return "/folders/"+fileName;
 
         }catch (IOException e) {
@@ -446,9 +449,22 @@ public class RestfulController {
     }
 
     //操作上传文件
-//    @RequestMapping(value = "/fileUpload", method = RequestMethod.PUT)
-//    public int changeRelation(@PathVariable("cId") int cId,
-//                              @RequestParam(""))
+    @RequestMapping(value = "/decreaseCourseByFile/{cId}", method = RequestMethod.PUT)
+    public @ResponseBody
+    void changeRelation(@PathVariable("cId") int cId,
+                        @RequestParam("attLogFile") String attLogFile) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(attLogFile));
+        String line = null;
+        while((line=reader.readLine())!=null){
+            String item[] = line.split("\t");
+            int uId = Integer.parseInt(item[0].trim());
+            Relations a = courseService.selectRelationBycId_uId(uId, cId);
+            int id = a.getId();
+            int cNumberLast = a.getcNumberLast();
+            cNumberLast = cNumberLast - 1;
+            courseService.updateCourseNumber(id, cNumberLast);
+        }
+    }
 
 
 

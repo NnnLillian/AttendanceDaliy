@@ -306,16 +306,19 @@
             $("#progress").css('width',progress + '%');
             $("#progress").html(progress + '%');
             console.log("hey!")
-        }).bind('fileuploadadd', function (e, data) {
-            $("#show").attr("src","/imgs/"+ data.files[0].name);
-            cImgUrl = "/imgs/"+ data.files[0].name
+        }).bind('fileuploaddone', function (e, data) {
+            console.log(JSON.stringify(data.result));
+            // alert(JSON.stringify(data));
+            $("#show").attr("src",data.result.name);
+            cImgUrl = data.result.name;
             console.log("cImgUrl:" + cImgUrl);
             $("#upload").css({display:"none"});
             $("#cancleUpload").css({display:""});
         }).bind('fileuploadfail', function(e, data){
-            console.log("failed!")
-            console.log(e)
-            console.log(data);
+            // var obj = JSON.stringify(data);
+            console.log("failed!");
+            console.log("e"+ e);
+            console.log("data"+ data);
             $("#progress").css('width',0 + '%');
             $("#progress").html(0 + '%');
             $("#show").attr("src","/imgs/index.png");

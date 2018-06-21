@@ -107,15 +107,21 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" th:each="item:${courseInfo}">
                 <h2 class="sub-header" th:text="${item.getcName()}"></h2>
-                <div id="toolbar" class="btn-group">
-                    <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#ModalStu">
+                <div id="toolbar" class="btn-group dropdown">
+                    <button id="btn_add_dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><!-- data-toggle="modal"
+                            data-target="#ModalStu"> -->
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                        <span class="caret"></span>
                     </button>
+                    <ul class="dropdown-menu" aria-labelledby="dLabel">
+                        <li><a id="btn_add" data-toggle="modal"
+                                    data-target="#ModalStu">单个学生新增</a></li>
+                        <li><a id="btn_stuMsgUpload" data-toggle="modal"
+                               data-target="#ModalStus">批量新增（上传文件）</a></li>
+                    </ul>
                     <button id="btn_import" type="button" class="btn btn-default" data-toggle="modal"
                             data-target="#ModalImport">
-                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>上传数据
-                    </button>
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>上传签到表                    </button>
                     <button id="btn_delete" type="button" class="btn btn-default" disabled="">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
                     </button>
@@ -163,7 +169,7 @@
         </div>
 
 
-        <!--上传数据模态框-->
+        <!--上传签到数据模态框-->
         <div class="modal fade" id="ModalImport" tabindex="-1" role="dialog" aria-labelledby="ModalStuLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -193,6 +199,27 @@
                                     </div>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" id="importFile">确认上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--批量新增学生模态框-->
+        <div class="modal fade" id="ModalStus" tabindex="-1" role="dialog" aria-labelledby="ModalStuLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="ModalStusLabel">添加学生</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
                             <div class="row fileupload-buttonbar" style="padding:15px;">
                                 <label for="IMPORTstuMsg" class="control-label">上传学生信息表</label>
                                 <div class="thumbnail">
@@ -204,7 +231,7 @@
                                     <div class="caption" align="center">
                                       <span id="uploadStuMsg" class="btn btn-primary fileinput-button">
                                           <span>选择文件</span>
-                                          <input type="file" id="IMPORTstuMsg" multiple>
+                                          <input type="file" id="IMPORTstuMsg" name="IMPORTstuMsg" multiple>
                                       </span>
                                         <a id="cancleUploadStuMsg" href="javascript:void(0)" class="btn btn-warning"
                                            role="button"
@@ -216,7 +243,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary" id="importFile">确认上传</button>
+                        <button type="submit" class="btn btn-primary" id="addStudents">确认添加</button>
                     </div>
                 </div>
             </div>
@@ -551,14 +578,15 @@
     $(function () {
         var attLogFile;
         $('#importFile').click(function () {
-            var mydata = '{"mydatafile":"' + attLogFile + '"}';
+            var mydata = '{"mydata":"' + attLogFile + '"}';
+            // var mydata = {"attLogFile": attLogFile};
             console.log(attLogFile);
             $.ajax({
                 type: 'PUT',
                 data: mydata,
                 // data:$('#courseForm').serialize(),
                 contentType: "application/json;charset=UTF-8",
-                // url: "/rest-api/importFile",
+                url: "/rest-api/decreaseCourseByFile/"+ [[${cId}]],
                 success: function () {
                     swal({
                         title: "添加成功！",
@@ -580,7 +608,7 @@
         });
 
         $("#IMPORTattLog").fileupload({
-            url: '/rest-api/csvUpload',
+            url: '/rest-api/fileUpload',
             dataType: 'json',
             sequentialUploads: true,
             // acceptFileTypes : /(gif|jpe?g|png|jpg)$/i,//验证格式
@@ -619,31 +647,76 @@
             });
         });
 
+        $("#cancleUploadAttLog").click(function () {
+
+            $("#progressAttLog").css('width',0 + '%');
+            $("#progressAttLog").html(0 + '%');
+            $("#uploadAttLog").css({display:""});
+            $("#cancleUploadAttLog").css({display:"none"});
+        });
+
+        $("#IMPORTstuMsg").fileupload({
+            url: '/rest-api/fileUpload',
+            dataType: 'json',
+            sequentialUploads: true,
+            // acceptFileTypes : /(gif|jpe?g|png|jpg)$/i,//验证格式
+            maxNumberOfFiles : 1,//最大上传文件数目
+            maxFileSize : 5000000, // 文件上限5MB
+            minFileSize : 100,//文件下限  100b
+            messages : {//文件错误信息
+                acceptFileTypes : '文件类型不匹配',
+                maxFileSize : '文件过大',
+                minFileSize : '文件过小'
+            }
+        }).bind('fileuploadprogress', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#progressStuMsg").css('width',progress + '%');
+            $("#progressStuMsg").html(progress + '%');
+            console.log("hey!")
+        }).bind('fileuploadadd', function (e, data) {
+            stuMsgFile = "/folders/"+ data.files[0].name
+            console.log("stuMsgFile:" + stuMsgFile);
+            $("#uploadStuMsg").css({display:"none"});
+            $("#cancleUploadStuMsg").css({display:""});
+        }).bind('fileuploadfail', function(e, data){
+            console.log("failed!")
+            console.log(e)
+            console.log(data);
+            $("#progressStuMsg").css('width',0 + '%');
+            $("#progressStuMsg").html(0 + '%');
+            $("#uploadStuMsg").css({display:""});
+            $("#cancleUploadStuMsgg").css({display:"none"});
+            swal({
+                title: "上传失败！",
+                // imageUrl: "imgs/imgTips.png",
+                text: "第一步上传失败",
+                // icon: "error",
+                button: "我知道了!",
+            });
+        });
+
+        $("#cancleUploadStuMsg").click(function () {
+
+            $("#progressStuMsg").css('width',0 + '%');
+            $("#progressStuMsg").html(0 + '%');
+            $("#uploadStuMsg").css({display:""});
+            $("#cancleUploadStuMsg").css({display:"none"});
+        });
 
         $("#Modal").on('show.bs.modal', function () {
             console.log("cleaning")
             $("#progressAttLog").css('width',0 + '%');
             $("#progressAttLog").html(0 + '%');
-            // $("#show").attr("src","/imgs/index.png");
             $("#uploadAttLog").css({display:""});
             $("#cancleUploadAttLog").css({display:"none"});
 
-        });
+            $("#progressStuMsg").css('width',0 + '%');
+            $("#progressStuMsg").html(0 + '%');
+            $("#uploadStuMsg").css({display:""});
+            $("#cancleUploadStuMsg").css({display:"none"});
 
-        $("#cancleUploadAttLog").click(function () {
-
-            $("#progressAttLog").css('width',0 + '%');
-            $("#progress").html(0 + '%');
-            $("#uploadAttLog").css({display:""});
-            $("#cancleUploadAttLog").css({display:"none"});
         });
     });
 </script>
-
-<bean name="multipartResolver"
-      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <property name="defaultEncoding" value="UTF-8"></property>
-</bean>
-
 </body>
 </html>

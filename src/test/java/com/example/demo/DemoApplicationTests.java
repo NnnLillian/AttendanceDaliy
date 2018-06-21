@@ -17,7 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -226,6 +227,22 @@ public class DemoApplicationTests {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void changeCourseLastByCsv() throws IOException {
+        int cId = 1;
+        BufferedReader reader = new BufferedReader(new FileReader("/Users/Lillian/Desktop/AttendanceDaliy/src/main/resources/folders/1_attlog.dat"));
+        String line = null;
+        while((line=reader.readLine())!=null){
+            String item[] = line.split("\t");
+            int uId = Integer.parseInt(item[0].trim());
+            Relations a = rMapper.selectRelationBycId_uId(uId, cId);
+            int id = a.getId();
+            int cNumberLast = a.getcNumberLast();
+            cNumberLast = cNumberLast - 1;
+            rMapper.updateCourseNumber(id, cNumberLast);
         }
     }
 

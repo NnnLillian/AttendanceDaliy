@@ -22,9 +22,11 @@ public class DemoApplication {
 
 @Component
 class WebConfigurer extends WebMvcConfigurerAdapter {
+	//映射路径，把输入的路径映射到相应的文件夹下
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/imgs/**").addResourceLocations("classpath:/imgs/");
+		registry.addResourceHandler("/folders/**").addResourceLocations("classpath:/folders/");
 	}
 
 }
