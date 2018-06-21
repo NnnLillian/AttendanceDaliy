@@ -371,11 +371,9 @@ public class RestfulController {
             fos.write(file.getBytes());
             fos.close();
 
-//            return JSONObject.fromObject("/imgs/"+fname);
-
+//          将字符串拼接称为JSON格式（但并不是JSON），返回前台，让前台解析
             return "{\"name\":\"/imgs/"+fname+"\"}";
         }catch (IOException e) {
-//            return JSONObject.fromObject("-1");
             return "-1";
         }
     }
@@ -436,12 +434,15 @@ public class RestfulController {
         fileName = "" + fileName.hashCode() + postfix;
 
         try {
+            URL res = Thread.currentThread().getContextClassLoader().getResource("folders/");
+            String fPath = res.getPath() + fileName;
+            File fs =  new File(fPath);
 
-            File fs =  new File("./folders/"+fileName);
+//            File fs =  new File("./folders/"+fileName);
             FileOutputStream foss = new FileOutputStream(fs);
             foss.write(file.getBytes());
             foss.close();
-            return "/folders/"+fileName;
+            return "{\"name\":\"/folders/"+fileName+"\"}";
 
         }catch (IOException e) {
             return "-1";

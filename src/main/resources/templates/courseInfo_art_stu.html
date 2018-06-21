@@ -594,7 +594,7 @@
                         icon: "success",
                         button: "我知道了!",
                     });
-                    $("#Modal").modal("hide");
+                    $("#ModalImport").modal("hide");
                 },
                 error: function () {
                     swal({
@@ -625,8 +625,8 @@
             $("#progressAttLog").css('width',progress + '%');
             $("#progressAttLog").html(progress + '%');
             console.log("hey!")
-        }).bind('fileuploadadd', function (e, data) {
-            attLogFile = "/folders/"+ data.files[0].name
+        }).bind('fileuploaddone', function (e, data) {
+            attLogFile = data.result.name
             console.log("attLogFile:" + attLogFile);
             $("#uploadAttLog").css({display:"none"});
             $("#cancleUploadAttLog").css({display:""});
@@ -653,6 +653,20 @@
             $("#progressAttLog").html(0 + '%');
             $("#uploadAttLog").css({display:""});
             $("#cancleUploadAttLog").css({display:"none"});
+        });
+
+        $("#ModalImport").on('show.bs.modal', function () {
+            console.log("cleaning");
+            $("#progressAttLog").css('width',0 + '%');
+            $("#progressAttLog").html(0 + '%');
+            $("#uploadAttLog").css({display:""});
+            $("#cancleUploadAttLog").css({display:"none"});
+
+            $("#progressStuMsg").css('width',0 + '%');
+            $("#progressStuMsg").html(0 + '%');
+            $("#uploadStuMsg").css({display:""});
+            $("#cancleUploadStuMsg").css({display:"none"});
+
         });
 
         $("#IMPORTstuMsg").fileupload({
@@ -703,7 +717,7 @@
             $("#cancleUploadStuMsg").css({display:"none"});
         });
 
-        $("#Modal").on('show.bs.modal', function () {
+        $("#ModalStus").on('show.bs.modal', function () {
             console.log("cleaning")
             $("#progressAttLog").css('width',0 + '%');
             $("#progressAttLog").html(0 + '%');
@@ -716,6 +730,7 @@
             $("#cancleUploadStuMsg").css({display:"none"});
 
         });
+
     });
 </script>
 </body>
