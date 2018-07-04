@@ -8,6 +8,7 @@ import com.example.demo.mapper.StudentInfoMapper;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.impl.CourseServiceimpl;
 import com.example.demo.service.impl.StudentServiceimpl;
+import org.apache.catalina.servlet4preview.ServletContext;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -233,7 +234,10 @@ public class DemoApplicationTests {
     @Test
     public void changeCourseLastByCsv() throws IOException {
         int cId = 1;
-        BufferedReader reader = new BufferedReader(new FileReader("/Users/Lillian/Desktop/AttendanceDaliy/src/main/resources/folders/1_attlog.dat"));
+        System.out.println(System.getProperty("user.dir"));
+        String root = System.getProperty("user.dir");
+        String path = root + File.separator + "target" + File.separator + "classes" + File.separator + "folders" + File.separator + "1_attlog.dat";
+        BufferedReader reader = new BufferedReader(new FileReader(path));
         String line = null;
         while((line=reader.readLine())!=null){
             String item[] = line.split("\t");

@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -429,6 +430,7 @@ public class RestfulController {
     public String uploadAttLog(@RequestParam("IMPORTattLog")MultipartFile file) {
 
         String fileName = file.getOriginalFilename();
+        String OriginalFileName = file.getOriginalFilename();
         String postfix=fileName.substring(fileName.lastIndexOf('.'));
         fileName += System.currentTimeMillis();
         fileName = "" + fileName.hashCode() + postfix;
@@ -442,7 +444,7 @@ public class RestfulController {
             FileOutputStream foss = new FileOutputStream(fs);
             foss.write(file.getBytes());
             foss.close();
-            return "{\"name\":\"/folders/"+fileName+"\"}";
+            return "{\"name\":\"/folders/"+fileName+"\", \"originalFileName\":\""+OriginalFileName+"\"}";
 
         }catch (IOException e) {
             return "-1";
@@ -450,11 +452,13 @@ public class RestfulController {
     }
 
     //操作上传文件
-    @RequestMapping(value = "/decreaseCourseByFile/{cId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/decreaseCourseByFile/{cId}", method = RequestMethod.POST)
     public @ResponseBody
-    void changeRelation(@PathVariable("cId") int cId,
-                        @RequestParam("attLogFile") String attLogFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(attLogFile));
+    String changeRelation(@PathVariable("cId") int cId,
+                        @RequestBody String attLogFile) throws IOException {
+        String root = System.getProperty("user.dir");
+        String path = root + File.separator + "target" + File.separator + "classes" + attLogFile;
+        BufferedReader reader = new BufferedReader(new FileReader(path));
         String line = null;
         while((line=reader.readLine())!=null){
             String item[] = line.split("\t");
@@ -465,7 +469,9 @@ public class RestfulController {
             cNumberLast = cNumberLast - 1;
             courseService.updateCourseNumber(id, cNumberLast);
         }
+        return "{\"name\":\""+attLogFile+"\"}";
     }
+
 
 
 
