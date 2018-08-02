@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.io.*;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -460,19 +461,91 @@ public class RestfulController {
         String path = root + File.separator + "target" + File.separator + "classes" + attLogFile;
         BufferedReader reader = new BufferedReader(new FileReader(path));
         String line = null;
+        int i = 0;
         while((line=reader.readLine())!=null){
             String item[] = line.split("\t");
             int uId = Integer.parseInt(item[0].trim());
+            String attStr = item[1];
+            Timestamp arriveTime = Timestamp.valueOf(attStr);
+            // 但是此处只检查，第一行的表数据是否已经存在于数据库中，如果是，则代表整个表并未上传过。
+            // 如果想要查询该表中的每个数据，可以设置一个bool变量，hasSaved。
+            // 或者可以使用MySQL触发器或者MySQL中的"where not exists"
+            if (i == 0){
+                Attendance attendanceRecord = studentService.selectAttendanceByUid_AttTime(uId,arriveTime);
+                if (attendanceRecord!=null)
+                    break;
+            }
+            i++;
             Relations a = courseService.selectRelationBycId_uId(uId, cId);
             int id = a.getId();
             int cNumberLast = a.getcNumberLast();
             cNumberLast = cNumberLast - 1;
             courseService.updateCourseNumber(id, cNumberLast);
+            // 将签到数据写入数据库
+            Timestamp leaveTime = null;
+            String attComment = null;
+            studentService.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+
         }
         return "{\"name\":\""+attLogFile+"\"}";
     }
 
-
+    //个人信息页面——得到该学生本门课的所有签到记录
+//    @GetMapping("/allStudentsByCourse/{cId}")
+//    public attendTableResult getAttendanceOfStudent(
+//            @PathVariable("cId") Integer cId,
+//            @RequestParam("offset") int offset,
+//            @RequestParam("limit") int limit,
+//            @RequestParam("order") String order,
+//            @RequestParam("search") String search) {
+//
+//        attendTableResult result = new attendTableResult();
+//        List<Attendance> attendances;
+//        int total;
+//
+//        if (limit > 50) {
+//            limit = 50;
+//        }
+//        if (search == null || search.trim().length() == 0) {
+//
+//            total = studentService.selectPageStudentCountByCourse(cId);
+////          studentInfos = studentService.selectAllStudent();
+//
+//            if (! (sort == null || sort.trim().length() == 0)) {
+//                result.setRows1(studentService.orderStudentByCourseNumber(cId, sort, order, offset, limit));
+//
+//            }
+//            else {
+//                studentInfos = studentService.selectStudentPageByCourseId(cId, offset, limit);
+////            studentInfos = studentService.orderStudentByCourseNumber(sort,order,offset,limit);
+//                result.setRows(studentInfos);
+//            }
+//
+//            result.setTotal(total);
+//
+//        } else {
+//
+//            search = "%" + search + "%";
+//            studentInfos = studentService.searchStudentByCourse(cId, search, offset, limit);
+//            total = studentService.searchStudentCountByCourse(cId, search);
+//            result.setTotal(total);
+//            result.setRows(studentInfos);
+//
+//        }
+//
+//        for (relationTableSearchResultItem it : result.getRows()) {
+//
+//            Relations r = courseService.selectRelationBycId_uId(it.getuId(), cId);
+//            it.setcNumberEd(r.getcNumberEd());
+//            it.setcNumberLast(r.getcNumberLast());
+//            if (null != r.getOverDate()) {
+//                it.setOverDate(r.getOverDate());
+//            }
+//        }
+//
+//
+//        return result;
+//    }
 
 
 }

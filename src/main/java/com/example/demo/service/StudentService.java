@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Attendance;
 import com.example.demo.entity.Relations;
 import com.example.demo.entity.StudentInfo;
 import com.example.demo.entity.relationTableSearchResultItem;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -52,5 +54,9 @@ public interface StudentService {
 
     void sendMessage(String cName, String uConnect);
 
+    // AttendanceMapper
+    int insertAttendance(int uId, int cId, Timestamp arriveTime, Timestamp leaveTime, String attComment);
+
+    Attendance selectAttendanceByUid_AttTime(int uId,Timestamp arriveTime);
 
 }

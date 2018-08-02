@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Attendance;
 import com.example.demo.entity.Relations;
 import com.example.demo.entity.StudentInfo;
 import com.example.demo.entity.relationTableSearchResultItem;
+import com.example.demo.mapper.AttendanceMapper;
 import com.example.demo.mapper.RelationsMapper;
 import com.example.demo.mapper.StudentInfoMapper;
 import com.example.demo.service.StudentService;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +27,8 @@ public class StudentServiceimpl implements StudentService{
     private StudentInfoMapper studentInfoMapper;
     @Autowired
     private RelationsMapper relationsMapper;
+    @Autowired
+    private AttendanceMapper attendanceMapper;
 
     @Override
     public List<StudentInfo> selectAllStudent() {
@@ -198,6 +203,16 @@ public class StudentServiceimpl implements StudentService{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public int insertAttendance(int uId, int cId, Timestamp arriveTime, Timestamp leaveTime, String attComment){
+        return attendanceMapper.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+    }
+
+    @Override
+    public Attendance selectAttendanceByUid_AttTime(int uId, Timestamp arriveTime){
+        return attendanceMapper.selectAttendanceByUid_AttTime(uId,arriveTime);
     }
 
 
