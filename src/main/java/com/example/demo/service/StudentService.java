@@ -54,8 +54,13 @@ public interface StudentService {
 
     void sendMessage(String cName, String uConnect);
 
+
+
+
     // AttendanceMapper
     int insertAttendance(int uId, int cId, Timestamp arriveTime, Timestamp leaveTime, String attComment);
+
+    Attendance selectAttendanceInfo(int attId);
 
     List<Attendance> selectAttendanceByUid_Cid(int uId, int cId);
 
@@ -68,5 +73,7 @@ public interface StudentService {
     List<Attendance> selectAttendancePageByUid_Cid(int uId, int cId, int offset,int limit);
 
     int selectPageAttendanceCount(int uId, int cId);
+
+    int deleteOneRecord(int attId);
 
 }

@@ -1,25 +1,17 @@
 package com.example.demo.mapper;
 
 import com.example.demo.entity.Attendance;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-
-import java.sql.Time;
+import org.apache.ibatis.annotations.*;
 import java.sql.Timestamp;
 import java.util.List;
 
 public interface AttendanceMapper {
 
     @Select("SELECT * FROM attendanceinfo WHERE attId = #{attId};")
-    Attendance selectAttendanceInfo(int attId);
-
-    @Delete("DELETE FROM attendanceinfo WHERE attId = #{attId};")
-    Attendance deleteAttendanceInfo(int attId);
+    Attendance selectAttendanceInfo(@Param("attId") int attId);
 
     @Select("SELECT * FROM attendanceinfo WHERE arriveTime between #{start} AND #{end};")
-    Attendance selectAttendanceRecord(@Param("start") Timestamp startTime, @Param("end") Timestamp endTime, @Param("uId") int uId);
+    List<Attendance> selectAttendanceRecord(@Param("start") Timestamp startTime, @Param("end") Timestamp endTime, @Param("uId") int uId);
 
     @Insert("INSERT INTO attendanceinfo(uId, cId, arriveTime, leaveTime, attComment) VALUES (#{uId}, #{cId},#{arriveTime},#{leaveTime},#{attComment});")
     int insertAttendance(@Param("uId") int uId, @Param("cId") int cId, @Param("arriveTime") Timestamp arriveTime, @Param("leaveTime") Timestamp leaveTime, @Param("attComment") String attComment);
@@ -42,4 +34,6 @@ public interface AttendanceMapper {
     @Select("SELECT COUNT(*) FROM attendanceinfo WHERE uId = #{uId} and cId = #{cId};")
     int selectPageAttendanceCount(@Param("uId") int uId, @Param("cId") int cId);
 
+    @Delete("DELETE FROM attendanceinfo WHERE attId = #{attId};")
+    int deleteOneRecord(@Param("attId") int attId);
 }

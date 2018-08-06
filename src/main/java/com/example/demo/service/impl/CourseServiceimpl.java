@@ -109,6 +109,11 @@ public class CourseServiceimpl implements CourseService {
     }
 
     @Override
+    public int updateRelation(Relations relations){
+        return relationsMapper.updateRelation(relations);
+    }
+
+    @Override
     public Relations selectRelationBycId_uId(int uId, int cId) {
         return relationsMapper.selectRelationBycId_uId(uId,cId);
     }

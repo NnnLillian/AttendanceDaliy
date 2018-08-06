@@ -205,9 +205,16 @@ public class StudentServiceimpl implements StudentService{
         }
     }
 
+    // ##############################################################################
+
     @Override
     public int insertAttendance(int uId, int cId, Timestamp arriveTime, Timestamp leaveTime, String attComment){
         return attendanceMapper.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+    }
+
+    @Override
+    public Attendance selectAttendanceInfo(int attId){
+        return attendanceMapper.selectAttendanceInfo(attId);
     }
 
     @Override
@@ -240,4 +247,8 @@ public class StudentServiceimpl implements StudentService{
         return attendanceMapper.selectPageAttendanceCount(uId, cId);
     }
 
+    @Override
+    public int deleteOneRecord(int attId){
+        return attendanceMapper.deleteOneRecord(attId);
+    }
 }

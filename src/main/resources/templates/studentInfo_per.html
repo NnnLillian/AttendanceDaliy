@@ -445,8 +445,8 @@
 
     function attOperateFormatter(value, row, index) {
         return [
-            // '<a class="deleteAtt" href="javascript:void(0)" title="删除" onclick="attOperateEvents('+row+')">',
-            '<a class="deleteAtt" href="javascript:void(0)" title="删除">',
+            '<a class="deleteAtt" href="javascript:void(0)" title="删除" onclick="attOperateEvents('+row['attId']+')">',
+            // '<a class="deleteAtt" href="javascript:void(0)" title="删除">',
             '<i class= "glyphicon glyphicon-trash"></i>',
             '</a>'
         ].join('')
@@ -493,14 +493,37 @@
                     })
                 }})
         },
-        // "click .deleteAtt": function (e, value, row, index) {
-        // },
     }
 
-    function attOperateEvents(row) {
-            alert('You click like action, row: ' + JSON.stringify(row));
+    function attOperateEvents(attId) {
+        // alert("this is the "+attId+" record");
+        swal({
+            title: "确定删除吗？",
+            text: "你将无法恢复该操作！",
+            icon: "warning",
+            buttons: ["取消","确认删除"],
+            dangerMode: true,
+        }).then(function (DelteRecord) {
+
+            if (DelteRecord) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: "/rest-api/deleteAttRecords/" + attId,
+                    success: function () {
+                        $attTable.bootstrapTable('refresh');
+                        $oneStuTable.bootstrapTable('refresh');
+                        swal("删除！", "该记录已经被删除，课程数量重置。",
+                            "success");
+                    },
+                    error: function () {
+                        swal("失败！", "改签到信息已经删除，请刷新",
+                            "error");
+                    }
+                })
+            }})
     }
 
+    // 格式化TimeStamp
     function changeTimeFormat(cellval){
         var dateVal = cellval + "";
         if (cellval != null) {

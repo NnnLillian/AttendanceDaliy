@@ -521,7 +521,7 @@ public class RestfulController {
 //        return result;
 //    }
 
-    //个人信息页面——得到该学生本门课的所有签到记录-无查询模块
+    // 个人信息页面——得到该学生本门课的所有签到记录-无查询模块
     @GetMapping("/oneStudentAttendance/{uId}/{cId}")
     public attendTableResult getAttendanceOfStudent(
             @PathVariable("cId") Integer cId,
@@ -543,6 +543,20 @@ public class RestfulController {
         result.setRows(attendances);
 
         return result;
+    }
+
+    // 个人信息页面--签到记录模态框--删除某条签到记录
+    @RequestMapping(value = "/deleteAttRecords/{attId}", method = RequestMethod.DELETE)
+    public int deleteRecords(@PathVariable(value = "attId") int attId) throws AssertionError {
+
+        Attendance a = studentService.selectAttendanceInfo(attId);
+        Relations r = courseService.selectRelationBycId_uId(a.getuId(),a.getcId());
+        r.setcNumberLast(r.getcNumberLast()+1);
+        r.setcNumberEd(r.getcNumberEd()-1);
+        courseService.updateRelation(r);
+
+        return studentService.deleteOneRecord(attId);
+
     }
 
 

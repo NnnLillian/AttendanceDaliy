@@ -37,4 +37,7 @@ public interface RelationsMapper {
 
     @Insert("INSERT INTO srelationc(uId, cId, cNumberLast, overDate) VALUES (#{uId}, #{cId},#{cNumberLast},#{overDate}); ")
     int insertCourseForStudent(@Param("uId")int uId, @Param("cId") int cId,@Param("cNumberLast") int cNumberLast, @Param("overDate") Date overDate);
+
+    @Update("UPDATE srelationc SET cNumberEd = #{cNumberEd}, cNumberLast = #{cNumberLast} WHERE id = #{id}")
+    int updateRelation(Relations relations);
 }

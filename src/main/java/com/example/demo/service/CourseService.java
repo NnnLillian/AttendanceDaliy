@@ -62,6 +62,6 @@ public interface CourseService {
 
     int deleteCourseSort(int cSortId);
 
-
+    int updateRelation(Relations relations);
 
 }
