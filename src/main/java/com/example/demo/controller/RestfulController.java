@@ -490,14 +490,44 @@ public class RestfulController {
         return "{\"name\":\""+attLogFile+"\"}";
     }
 
-    //个人信息页面——得到该学生本门课的所有签到记录
+//    //个人信息页面——得到该学生本门课的所有签到记录
+//    @GetMapping("/oneStudentAttendance/{uId}/{cId}")
+//    public attendTableResult getAttendanceOfStudent(
+//            @PathVariable("cId") Integer cId,
+//            @PathVariable("uId") Integer uId,
+//            @RequestParam("offset") int offset,
+//            @RequestParam("limit") int limit,
+//            @RequestParam("search") String search) {
+//
+//        attendTableResult result = new attendTableResult();
+//        List<Attendance> attendances;
+//
+//        if (limit > 50) {
+//            limit = 50;
+//        }
+//        if (search != null && search.length() != 0) {
+//            search = "%" + search + "%";
+//            attendances = studentService.searchOneStudentAttendance(uId, cId, search, offset, limit);
+//            int total = studentService.searchAttendanceByArriveTime(uId, cId, search);
+//            result.setTotal(total);
+//            result.setRows(attendances);
+//        } else {
+//            attendances = studentService.selectAttendancePageByUid_Cid(uId,cId,offset,limit);
+//            System.out.println(attendances.get(0).getArriveTime());
+//            int total = studentService.selectPageAttendanceCount(uId,cId);
+//            result.setTotal(total);
+//            result.setRows(attendances);
+//        }
+//        return result;
+//    }
+
+    //个人信息页面——得到该学生本门课的所有签到记录-无查询模块
     @GetMapping("/oneStudentAttendance/{uId}/{cId}")
     public attendTableResult getAttendanceOfStudent(
             @PathVariable("cId") Integer cId,
             @PathVariable("uId") Integer uId,
             @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit,
-            @RequestParam("search") String search) {
+            @RequestParam("limit") int limit) {
 
         attendTableResult result = new attendTableResult();
         List<Attendance> attendances;
@@ -505,26 +535,12 @@ public class RestfulController {
         if (limit > 50) {
             limit = 50;
         }
-        if (search != null && search.length() != 0) {
-            search = "%" + search + "%";
-            attendances = studentService.searchOneStudentAttendance(uId, cId, search, offset, limit);
-            int total = studentService.searchAttendanceByArriveTime(uId, cId, search);
-            result.setTotal(total);
-            result.setRows(attendances);
-        } else {
-            attendances = studentService.selectAttendancePageByUid_Cid(uId,cId,offset,limit);
-            System.out.println(attendances.get(0).getArriveTime());
-            int total = studentService.selectPageAttendanceCount(uId,cId);
-            result.setTotal(total);
-            result.setRows(attendances);
-        }
 
-//        for (attendTableResultItem at : result.getRows()){
-//            Attendance a = studentService.selectAttendanceByUid_AttTime(uId, at.getArriveTime());
-//            at.setArriveTime(a.getArriveTime());
-//            at.setLeaveTime(a.getLeaveTime());
-//            at.setAttComment(a.getAttComment());
-//        }
+        attendances = studentService.selectAttendancePageByUid_Cid(uId,cId,offset,limit);
+        System.out.println(attendances.get(0).getArriveTime());
+        int total = studentService.selectPageAttendanceCount(uId,cId);
+        result.setTotal(total);
+        result.setRows(attendances);
 
         return result;
     }

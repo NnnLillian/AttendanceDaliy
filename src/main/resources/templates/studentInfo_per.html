@@ -242,7 +242,7 @@
                 sidePagination: 'server',//服务器端分页
                 pageList: [5, 10, 20, 50],//分页步进值
                 // showFooter: "false",
-                search: true,//显示搜索框
+                // search: true,//显示搜索框
                 clickToSelect: false,  //是否启用点击选中行
                 toolbar: '#attToolbar', //工具按钮用哪个容器
                 idField: 'id',
@@ -260,7 +260,7 @@
                     field: 'operate',
                     title: '删除',
                     align: 'center',
-                    // events: operateEvents,
+                    // events: attOperateEvents,
                     formatter: attOperateFormatter
                 }]
             })
@@ -445,6 +445,7 @@
 
     function attOperateFormatter(value, row, index) {
         return [
+            // '<a class="deleteAtt" href="javascript:void(0)" title="删除" onclick="attOperateEvents('+row+')">',
             '<a class="deleteAtt" href="javascript:void(0)" title="删除">',
             '<i class= "glyphicon glyphicon-trash"></i>',
             '</a>'
@@ -492,9 +493,12 @@
                     })
                 }})
         },
-        "click .deleteAtt": function (e, value, row, index) {
+        // "click .deleteAtt": function (e, value, row, index) {
+        // },
+    }
+
+    function attOperateEvents(row) {
             alert('You click like action, row: ' + JSON.stringify(row));
-        },
     }
 
     function changeTimeFormat(cellval){
