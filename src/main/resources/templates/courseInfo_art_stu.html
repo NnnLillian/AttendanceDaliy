@@ -183,6 +183,7 @@
                             <div class="row fileupload-buttonbar" style="padding:15px;">
                                 <label for="IMPORTattLog" class="control-label">上传签到表</label>
                                 <div class="thumbnail">
+                                    <div id="message"></div>
                                     <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
                                          aria-valuemax="100" aria-valuenow="0" style="margin-top: 20px;margin-bottom: 10px;">
                                         <div id="progressAttLog" class="progress-bar progress-bar-striped active"
@@ -578,15 +579,24 @@
     $(function () {
         var attLogFile;
         $('#importFile').click(function () {
-            var mydata = '{"mydata":"' + attLogFile + '"}';
-            // var mydata = {"attLogFile": attLogFile};
-            console.log(attLogFile);
+            var mydata = '{"attLogFile":"' + attLogFile + '"}';
+            // var mydata = {attLogFile: attLogFile};
+            console.log("importFile:"+ attLogFile);
+            swal({
+                title: "请稍等！",
+                text: "正在上传。",
+                timer: 8000,
+                showConfirmButton: false
+            });
             $.ajax({
-                type: 'PUT',
-                data: mydata,
+                type: 'POST',
+                // data: JSON.stringify({attLogFile :attLogFile}),
+                // data: mydata,
+                data:attLogFile,
                 // data:$('#courseForm').serialize(),
-                contentType: "application/json;charset=UTF-8",
-                url: "/rest-api/decreaseCourseByFile/"+ [[${cId}]],
+                contentType: "application/json",
+                url: "/rest-api/decreaseCourseByFile/"+ [[${cId}]] ,
+                dataType : 'json',
                 success: function () {
                     swal({
                         title: "添加成功！",
@@ -599,7 +609,7 @@
                 error: function () {
                     swal({
                         title: "添加失败！",
-                        text: "没有上传到后台!",
+                        text: "请等待一段时间后再次尝试!",
                         icon: "error",
                         button: "我知道了!",
                     });
@@ -613,21 +623,23 @@
             sequentialUploads: true,
             // acceptFileTypes : /(gif|jpe?g|png|jpg)$/i,//验证格式
             maxNumberOfFiles : 1,//最大上传文件数目
-            maxFileSize : 5000000, // 文件上限5MB
+            maxFileSize :5000000, // 文件上限5MB
             minFileSize : 100,//文件下限  100b
             messages : {//文件错误信息
                 acceptFileTypes : '文件类型不匹配',
                 maxFileSize : '文件过大',
                 minFileSize : '文件过小'
-            }
+            },
         }).bind('fileuploadprogress', function (e, data) {
+            console.log(data);
             var progress = parseInt(data.loaded / data.total * 100, 10);
             $("#progressAttLog").css('width',progress + '%');
             $("#progressAttLog").html(progress + '%');
             console.log("hey!")
         }).bind('fileuploaddone', function (e, data) {
-            attLogFile = data.result.name
+            attLogFile = data.result.name;
             console.log("attLogFile:" + attLogFile);
+            $('<p/>').text('文件：'+ data.result['originalFileName'] + ' 后台处理，请等待几秒钟后，确认上传').appendTo($("#message"));
             $("#uploadAttLog").css({display:"none"});
             $("#cancleUploadAttLog").css({display:""});
         }).bind('fileuploadfail', function(e, data){
@@ -661,11 +673,12 @@
             $("#progressAttLog").html(0 + '%');
             $("#uploadAttLog").css({display:""});
             $("#cancleUploadAttLog").css({display:"none"});
+            $("#uploadAttLog").css({display:""});
 
             $("#progressStuMsg").css('width',0 + '%');
             $("#progressStuMsg").html(0 + '%');
             $("#uploadStuMsg").css({display:""});
-            $("#cancleUploadStuMsg").css({display:"none"});
+            $("#message").css({display:"none"});
 
         });
 

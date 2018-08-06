@@ -11,6 +11,8 @@ public class Attendance {
     private int cId;
     private Timestamp arriveTime;
     private Timestamp leaveTime;
+    private String attComment;
+
 
     public int getAttId() {
         return attId;
@@ -50,5 +52,12 @@ public class Attendance {
 
     public void setLeaveTime(Timestamp leaveTime) {
         this.leaveTime = leaveTime;
+    }
+    public String getAttComment() {
+        return attComment;
+    }
+
+    public void setAttComment(String attComment) {
+        this.attComment = attComment;
     }
 }

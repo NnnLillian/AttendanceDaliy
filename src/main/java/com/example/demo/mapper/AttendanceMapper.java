@@ -30,4 +30,16 @@ public interface AttendanceMapper {
     @Select("SELECT * From attendanceinfo where uId = #{uId} and arriveTime = #{arriveTime};")
     Attendance selectAttendanceByUid_AttTime(@Param("uId") int uId, @Param("arriveTime") Timestamp arriveTime);
 
+    @Select("SELECT * FROM attendanceinfo WHERE uId = #{uId} and cId = #{cId} and attendanceinfo.arriveTime like #{keyword} LIMIT #{limit}, #{count};")
+    List<Attendance> searchOneStudentAttendance(@Param("uId") int uId, @Param("cId") int cId, @Param("Keyword") String keyword, @Param("limit") int offset, @Param("count") int limit);
+
+    @Select("SELECT COUNT(*) From attendanceinfo where uId = #{uId} and cId = #{cId} and attendanceinfo.arriveTime like #{keyword};")
+    int searchAttendanceByArriveTime(@Param("uId") int uId, @Param("cId") int cId, @Param("keyword") String keyword);
+
+    @Select("SELECT * FROM attendanceinfo WHERE uId = #{uId} and cId = #{cId} LIMIT #{limit}, #{count};")
+    List<Attendance> selectAttendancePageByUid_Cid(@Param("uId") int uId, @Param("cId") int cId, @Param("limit") int offset, @Param("count") int limit);
+
+    @Select("SELECT COUNT(*) FROM attendanceinfo WHERE uId = #{uId} and cId = #{cId};")
+    int selectPageAttendanceCount(@Param("uId") int uId, @Param("cId") int cId);
+
 }

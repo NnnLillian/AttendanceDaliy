@@ -142,7 +142,7 @@
                 <table class="table table-striped" id="oneStuTable">
                 </table>
 
-                <!--模态框-->
+                <!--新增课程-模态框-->
                 <div class="modal fade" id="Modal" tabindex="-1" role="dialog"
                      aria-labelledby="ModalLabel">
                     <div class="modal-dialog" role="document">
@@ -180,6 +180,36 @@
                     </div>
                 </div>
 
+                <!--查看签到模态框-->
+                <div class="modal fade" id="attModal" tabindex="-1" role="dialog"
+                     aria-labelledby="ModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="attModalLabel">签到信息</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="attToolbar" class="btn-group">
+                                    <!--<button id="btn_delete" type="button" class="btn btn-default">-->
+                                        <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>删除-->
+                                    <!--</button>-->
+                                    <!--<button id="btn_exit" type="button" class="btn btn-default">-->
+                                    <!--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改-->
+                                    <!--</button>-->
+                                </div>
+                                <table class="table table-striped" id = "attTable"></table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     </div>
@@ -189,7 +219,53 @@
 <script th:inline="javascript">
     var $btn_delete = $('#btn_delete');
     var $oneStuTable = $('#oneStuTable');
+    var $attTable = $("#attTable");
     selections = [];
+    var RcId;
+
+
+    function process(cId) {
+        RcId = cId;
+        console.log(RcId);
+        initTable()
+        {
+            $attTable.bootstrapTable({
+                // height: getHeight(),
+                // url: '/rest-api/oneStudentAttendance/' + [[${uId}]] + "/" + row['cId'],
+                url: '/rest-api/oneStudentAttendance/' + [[${uId}]] + "/" + RcId,
+                striped: true,   //是否显示行间隔色
+                // showHeader: true,
+                showColumns: true, //是否显示所有的列
+                showRefresh: true, //现实刷新按钮
+                showExport: true, //显示导出
+                pagination: true,//分页
+                sidePagination: 'server',//服务器端分页
+                pageList: [5, 10, 20, 50],//分页步进值
+                // showFooter: "false",
+                search: true,//显示搜索框
+                clickToSelect: false,  //是否启用点击选中行
+                toolbar: '#attToolbar', //工具按钮用哪个容器
+                idField: 'id',
+                editable: true, //行内编辑
+
+                columns: [{
+                    field: 'arriveTime',
+                    title: '签到时间',
+                    // 时间格式化函数 将TimeStamp格式更改为可视化
+                    formatter: function (value, row, index) {
+                        return changeTimeFormat(value)
+                    }
+                    // footerFormatter: totalNameFormatter,
+                }, {
+                    field: 'operate',
+                    title: '删除',
+                    align: 'center',
+                    // events: operateEvents,
+                    formatter: attOperateFormatter
+                }]
+            })
+        }
+    }
 
     function initTable() {
         $oneStuTable.bootstrapTable({
@@ -214,6 +290,7 @@
             columns: [{
                 field: 'cName',
                 title: '课程名称',
+                events: operateEvents,
                 footerFormatter: totalNameFormatter,
             }, {
                 field: 'cNumberEd',
@@ -262,7 +339,6 @@
                 events: operateEvents,
                 formatter: operateFormatter
             }],
-
             //保存修改后的学生课程信息
             onEditableSave: function (field, row) {
                 //可进行异步操作
@@ -304,6 +380,7 @@
         setTimeout(function () {
             $oneStuTable.bootstrapTable('resetView');
         }, 200);
+
         // 'check.bs.table uncheck.bs.table + check-all.bs.table uncheck-all.bs.table'
         $oneStuTable.on('click-cell.bs.table', function (field, value, row, $element) {
             $btn_delete.prop('disabled', !$oneStuTable.bootstrapTable('getSelections').length);
@@ -334,6 +411,8 @@
                 height: getHeight()
             });
         });
+
+
     }
 
     function getIdSelections() {
@@ -350,30 +429,38 @@
         return res;
     }
 
-    function responseHandler(res) {
-        $.each(res.rows, function (i, row) {
-            row.state = $.inArray(row.id, selections) !== -1;
-        });
-        return res;
-    }
-
 
     // 操作栏中的图标
     function operateFormatter(value, row, index) {
         return [
-            '<a class="like" href="javascript:void(0)" title="查看">',
+            // '<a class="like" href="javascript:void(0)" title="查看" onclick="process('+row['cId']+')">',
+            '<a class="like" href="javascript:void(0)" title="查看" onclick="process('+row['cId']+')">',
             '<i class="glyphicon glyphicon-eye-open"></i>',
             '</a>  ',
             '<a class="remove" href="javascript:void(0)" title="移除">',
             '<i class="glyphicon glyphicon-remove"></i>',
+            '</a>',
+        ].join('   ');
+    }
+
+    function attOperateFormatter(value, row, index) {
+        return [
+            '<a class="deleteAtt" href="javascript:void(0)" title="删除">',
+            '<i class= "glyphicon glyphicon-trash"></i>',
             '</a>'
-        ].join('');
+        ].join('')
     }
 
     // 对图标操作的行动
     window.operateEvents = {
         'click .like': function (e, value, row, index) {
-            alert('You click like action, row: ' + JSON.stringify(row));
+            // 单纯显示 row（类型：StudentRelationTableSearchResultItem
+            // alert('You click like action, row: ' + JSON.stringify(row));
+            //cId = row['cId'];
+            console.log("click .like is "+ row['cId']);
+            $('#attModal').modal('show');
+
+            // alert(row['cId']);
         },
         'click .remove': function (e, value, row, index) {
             swal({
@@ -405,8 +492,25 @@
                     })
                 }})
         },
+        "click .deleteAtt": function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
     }
 
+    function changeTimeFormat(cellval){
+        var dateVal = cellval + "";
+        if (cellval != null) {
+            var date = new Date(parseInt(dateVal.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+            var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+        }
+    }
 
     function totalNameFormatter(data) {
         return data.length;
@@ -420,6 +524,7 @@
     $(function () {
         var scripts = [
                 '/js/bootstrap-table.min.js',
+                '/js/bootstrap-table-locale-all.min.js',
                 '/js/extensions/export/bootstrap-table-export.min.js',
                 '/js/tableExport.min.js',
                 '/js/extensions/editable/bootstrap-table-editable.js',
@@ -617,7 +722,6 @@
         });
     })
 </script>
-
 
 <!--<script>-->
 <!--function showTime() {-->

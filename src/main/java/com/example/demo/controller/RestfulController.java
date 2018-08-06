@@ -202,7 +202,7 @@ public class RestfulController {
 //    }
 
 
-    //    学生个人页面--课程部分--修改已有课程信息
+    //    学生个人页面--课程部分--获得已有课程信息
     @GetMapping("/OneStudentByCourse/{uId}")
     public StudentRelationTableSearchResult getOneStudentByCourse(
             @PathVariable("uId") Integer uId,
@@ -243,7 +243,7 @@ public class RestfulController {
 
         return result;
     }
-
+    //    学生个人页面--课程部分--修改已有课程信息
     @PostMapping("/EditStudentCourse/{uId}")
     public int setStudentCourseInfoByUid(@PathVariable("uId") int uId,
                                          @RequestParam("cId") int cId,
@@ -452,7 +452,7 @@ public class RestfulController {
         }
     }
 
-    //操作上传文件
+    // 操作上传文件
     @RequestMapping(value = "/decreaseCourseByFile/{cId}", method = RequestMethod.POST)
     public @ResponseBody
     String changeRelation(@PathVariable("cId") int cId,
@@ -491,61 +491,43 @@ public class RestfulController {
     }
 
     //个人信息页面——得到该学生本门课的所有签到记录
-//    @GetMapping("/allStudentsByCourse/{cId}")
-//    public attendTableResult getAttendanceOfStudent(
-//            @PathVariable("cId") Integer cId,
-//            @RequestParam("offset") int offset,
-//            @RequestParam("limit") int limit,
-//            @RequestParam("order") String order,
-//            @RequestParam("search") String search) {
-//
-//        attendTableResult result = new attendTableResult();
-//        List<Attendance> attendances;
-//        int total;
-//
-//        if (limit > 50) {
-//            limit = 50;
+    @GetMapping("/oneStudentAttendance/{uId}/{cId}")
+    public attendTableResult getAttendanceOfStudent(
+            @PathVariable("cId") Integer cId,
+            @PathVariable("uId") Integer uId,
+            @RequestParam("offset") int offset,
+            @RequestParam("limit") int limit,
+            @RequestParam("search") String search) {
+
+        attendTableResult result = new attendTableResult();
+        List<Attendance> attendances;
+
+        if (limit > 50) {
+            limit = 50;
+        }
+        if (search != null && search.length() != 0) {
+            search = "%" + search + "%";
+            attendances = studentService.searchOneStudentAttendance(uId, cId, search, offset, limit);
+            int total = studentService.searchAttendanceByArriveTime(uId, cId, search);
+            result.setTotal(total);
+            result.setRows(attendances);
+        } else {
+            attendances = studentService.selectAttendancePageByUid_Cid(uId,cId,offset,limit);
+            System.out.println(attendances.get(0).getArriveTime());
+            int total = studentService.selectPageAttendanceCount(uId,cId);
+            result.setTotal(total);
+            result.setRows(attendances);
+        }
+
+//        for (attendTableResultItem at : result.getRows()){
+//            Attendance a = studentService.selectAttendanceByUid_AttTime(uId, at.getArriveTime());
+//            at.setArriveTime(a.getArriveTime());
+//            at.setLeaveTime(a.getLeaveTime());
+//            at.setAttComment(a.getAttComment());
 //        }
-//        if (search == null || search.trim().length() == 0) {
-//
-//            total = studentService.selectPageStudentCountByCourse(cId);
-////          studentInfos = studentService.selectAllStudent();
-//
-//            if (! (sort == null || sort.trim().length() == 0)) {
-//                result.setRows1(studentService.orderStudentByCourseNumber(cId, sort, order, offset, limit));
-//
-//            }
-//            else {
-//                studentInfos = studentService.selectStudentPageByCourseId(cId, offset, limit);
-////            studentInfos = studentService.orderStudentByCourseNumber(sort,order,offset,limit);
-//                result.setRows(studentInfos);
-//            }
-//
-//            result.setTotal(total);
-//
-//        } else {
-//
-//            search = "%" + search + "%";
-//            studentInfos = studentService.searchStudentByCourse(cId, search, offset, limit);
-//            total = studentService.searchStudentCountByCourse(cId, search);
-//            result.setTotal(total);
-//            result.setRows(studentInfos);
-//
-//        }
-//
-//        for (relationTableSearchResultItem it : result.getRows()) {
-//
-//            Relations r = courseService.selectRelationBycId_uId(it.getuId(), cId);
-//            it.setcNumberEd(r.getcNumberEd());
-//            it.setcNumberLast(r.getcNumberLast());
-//            if (null != r.getOverDate()) {
-//                it.setOverDate(r.getOverDate());
-//            }
-//        }
-//
-//
-//        return result;
-//    }
+
+        return result;
+    }
 
 
 }

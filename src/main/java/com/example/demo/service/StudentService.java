@@ -57,6 +57,16 @@ public interface StudentService {
     // AttendanceMapper
     int insertAttendance(int uId, int cId, Timestamp arriveTime, Timestamp leaveTime, String attComment);
 
+    List<Attendance> selectAttendanceByUid_Cid(int uId, int cId);
+
     Attendance selectAttendanceByUid_AttTime(int uId,Timestamp arriveTime);
+
+    List<Attendance> searchOneStudentAttendance(int uId, int cId,String keyword,int offset, int limit);
+
+    int searchAttendanceByArriveTime(int uId, int cId, String keyword);
+
+    List<Attendance> selectAttendancePageByUid_Cid(int uId, int cId, int offset,int limit);
+
+    int selectPageAttendanceCount(int uId, int cId);
 
 }

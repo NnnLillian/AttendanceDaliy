@@ -211,9 +211,33 @@ public class StudentServiceimpl implements StudentService{
     }
 
     @Override
+    public List<Attendance> selectAttendanceByUid_Cid(int uId, int cId){
+        return attendanceMapper.selectAttendanceByUid_Cid(uId,cId);
+    }
+
+    @Override
     public Attendance selectAttendanceByUid_AttTime(int uId, Timestamp arriveTime){
         return attendanceMapper.selectAttendanceByUid_AttTime(uId,arriveTime);
     }
 
+    @Override
+    public  List<Attendance> searchOneStudentAttendance(int uId, int cId,String keyword,int offset, int limit){
+        return attendanceMapper.searchOneStudentAttendance(uId,cId,keyword,offset,limit);
+    }
+
+    @Override
+    public  int searchAttendanceByArriveTime(int uId, int cId, String keyword){
+        return attendanceMapper.searchAttendanceByArriveTime(uId, cId, keyword);
+    }
+
+    @Override
+    public List<Attendance> selectAttendancePageByUid_Cid(int uId, int cId, int offset,int limit){
+        return attendanceMapper.selectAttendancePageByUid_Cid(uId, cId, offset, limit);
+    }
+
+    @Override
+    public int selectPageAttendanceCount(int uId, int cId){
+        return attendanceMapper.selectPageAttendanceCount(uId, cId);
+    }
 
 }
