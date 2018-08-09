@@ -87,7 +87,6 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a th:href="@{'/course/getAllcourseSort'}">课程信息</a></li>
                 <li><a th:href="@{'/student/getAllStudentInfo'}">学生信息</a></li>
-                <li><a href="uploadTable.html">签到表上传</a></li>
                 <li><a href="javascript:history.go(-1)">返回</a></li>
             </ul>
             <!-- 并不需要的一个查询 -->
@@ -221,14 +220,17 @@
     var $oneStuTable = $('#oneStuTable');
     var $attTable = $("#attTable");
     selections = [];
-    var RcId;
 
 
     function process(cId) {
-        RcId = cId;
+        var RcId = cId;
         console.log(RcId);
         initTable()
         {
+            console.log("initTable"+RcId);
+            // 解决bootstrap-table多次请求值触发一次的问题
+            // 在初始化table之前，要将table销毁，否则会保留上次加载的内容
+            $attTable.bootstrapTable('destroy');
             $attTable.bootstrapTable({
                 // height: getHeight(),
                 // url: '/rest-api/oneStudentAttendance/' + [[${uId}]] + "/" + row['cId'],
@@ -263,7 +265,10 @@
                     // events: attOperateEvents,
                     formatter: attOperateFormatter
                 }]
-            })
+            });
+            setTimeout(function () {
+                $attTable.bootstrapTable('resetView');
+            }, 200);
         }
     }
 
@@ -434,7 +439,7 @@
     function operateFormatter(value, row, index) {
         return [
             // '<a class="like" href="javascript:void(0)" title="查看" onclick="process('+row['cId']+')">',
-            '<a class="like" href="javascript:void(0)" title="查看" onclick="process('+row['cId']+')">',
+            '<a class="like" href="javascript:void(0)" title="查看">',
             '<i class="glyphicon glyphicon-eye-open"></i>',
             '</a>  ',
             '<a class="remove" href="javascript:void(0)" title="移除">',
@@ -460,6 +465,7 @@
             //cId = row['cId'];
             console.log("click .like is "+ row['cId']);
             $('#attModal').modal('show');
+            process(row['cId']);
 
             // alert(row['cId']);
         },
