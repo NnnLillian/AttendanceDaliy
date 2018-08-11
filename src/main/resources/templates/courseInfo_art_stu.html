@@ -342,7 +342,9 @@
                 // }
             }, {
                 field: 'overDate',
-                title: '课程截止时间'
+                title: '课程截止时间',
+                sortable: true,
+                formatter: TimeFormatter
             }, {
                 field: 'operate',
                 title: '操作',
@@ -365,6 +367,27 @@
             console.log(name, args);
         });
 
+
+        function TimeFormatter(value, row, index){
+            var stringTime = value;
+            //  将 - 换为 /
+            stringTime = stringTime.replace(/-/g,"/");
+            var timestamp = new Date(stringTime);
+            var today = new Date();
+            //  设置为1个月前
+            today.setDate(today.getDate() - 30);
+            if (timestamp.getTime() < today.getTime()){
+                return [
+                    '<span style="color: red; font-weight:bold">'+value+'</span>'
+                ].join('');
+            } else {
+                return [
+                    '<span>'+value+'</span>'
+                ].join('');
+            }
+
+
+        };
 
         $btn_delete.click(function () {
             var selected = $courseTable.bootstrapTable('getSelections')
