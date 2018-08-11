@@ -190,7 +190,7 @@
                             <div class="row fileupload-buttonbar" style="padding:15px;">
                                 <label for="IMPORTattLog" class="control-label">上传签到表</label>
                                 <div class="thumbnail">
-                                    <div id="message"></div>
+                                    <div id="message" style="height:20px"></div>
                                     <div class="progress progress-striped active" role="progressbar" aria-valuemin="10"
                                          aria-valuemax="100" aria-valuenow="0" style="margin-top: 20px;margin-bottom: 10px;">
                                         <div id="progressAttLog" class="progress-bar progress-bar-striped active"
@@ -670,7 +670,8 @@
         }).bind('fileuploaddone', function (e, data) {
             attLogFile = data.result.name;
             console.log("attLogFile:" + attLogFile);
-            $('<p/>').text('文件：'+ data.result['originalFileName'] + ' 后台处理，请等待几秒钟后，确认上传').appendTo($("#message"));
+            $("#message").css({display:""});
+            $("#message").html("<span>文件：</span><b>"+ data.result['originalFileName'] + "</b> <span> 正在后台处理，请等待几秒钟后，点击确认上传</span>");
             $("#uploadAttLog").css({display:"none"});
             $("#cancleUploadAttLog").css({display:""});
         }).bind('fileuploadfail', function(e, data){
@@ -696,6 +697,7 @@
             $("#progressAttLog").html(0 + '%');
             $("#uploadAttLog").css({display:""});
             $("#cancleUploadAttLog").css({display:"none"});
+            $("#message").css({display:"none"});
         });
 
         $("#ModalImport").on('show.bs.modal', function () {
