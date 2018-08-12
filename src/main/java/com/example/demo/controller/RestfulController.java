@@ -196,11 +196,6 @@ public class RestfulController {
         }
 
     }
-//    public int ModifyStudent(StudentInfo studentInfo) {
-//        studentService.updateOneStudent(studentInfo);
-//        return 0;
-//    }
-
 
     //    学生个人页面--课程部分--获得已有课程信息
     @GetMapping("/OneStudentByCourse/{uId}")
@@ -243,6 +238,7 @@ public class RestfulController {
 
         return result;
     }
+
     //    学生个人页面--课程部分--修改已有课程信息
     @PostMapping("/EditStudentCourse/{uId}")
     public int setStudentCourseInfoByUid(@PathVariable("uId") int uId,
@@ -326,6 +322,7 @@ public class RestfulController {
 
         return result;
     }
+
     //    增加课程类别
     @RequestMapping(value = "/newCourseSort", method = RequestMethod.PUT)
     public @ResponseBody
@@ -364,11 +361,14 @@ public class RestfulController {
         fname = "" + fname.hashCode() + postfix;
 
         try {
-            URL classPath = Thread.currentThread().getContextClassLoader().getResource("imgs/");
-            String fPath = classPath.getPath() + fname;
-            File f =  new File(fPath);
+            // 本地用的相对路径
+//            URL classPath = Thread.currentThread().getContextClassLoader().getResource("imgs/");
+//            String fPath = classPath.getPath() + fname;
+//            File f =  new File(fPath);
 
-//            File f =  new File("./imgs/"+fname);
+            // 服务器用的绝对路径
+            File f =  new File("/root/java/imgs/"+fname);
+
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(file.getBytes());
             fos.close();
@@ -376,6 +376,7 @@ public class RestfulController {
 //          将字符串拼接称为JSON格式（但并不是JSON），返回前台，让前台解析
             return "{\"name\":\"/imgs/"+fname+"\"}";
         }catch (IOException e) {
+            e.printStackTrace();
             return "-1";
         }
     }
@@ -437,11 +438,13 @@ public class RestfulController {
         fileName = "" + fileName.hashCode() + postfix;
 
         try {
-            URL res = Thread.currentThread().getContextClassLoader().getResource("folders/");
-            String fPath = res.getPath() + fileName;
-            File fs =  new File(fPath);
+            //  本地中的路径
+//            URL res = Thread.currentThread().getContextClassLoader().getResource("folders/");
+//            String fPath = res.getPath() + fileName;
+//            File fs =  new File(fPath);
 
-//            File fs =  new File("./folders/"+fileName);
+            //  网站中的绝对路径
+            File fs =  new File("/root/java/folders/"+fileName);
             FileOutputStream foss = new FileOutputStream(fs);
             foss.write(file.getBytes());
             foss.close();
@@ -458,7 +461,10 @@ public class RestfulController {
     String changeRelation(@PathVariable("cId") int cId,
                         @RequestBody String attLogFile) throws IOException {
         String root = System.getProperty("user.dir");
-        String path = root + File.separator + "target" + File.separator + "classes" + attLogFile;
+        //  本地中的绝对路径
+//        String path = root + File.separator + "target" + File.separator + "classes" + attLogFile;
+        //  网站中的绝对路径
+        String path = root + attLogFile;
         BufferedReader reader = new BufferedReader(new FileReader(path));
         String line = null;
         int i = 0;
@@ -472,8 +478,10 @@ public class RestfulController {
             // 或者可以使用MySQL触发器或者MySQL中的"where not exists"
             if (i == 0){
                 Attendance attendanceRecord = studentService.selectAttendanceByUid_AttTime(uId,arriveTime);
-                if (attendanceRecord!=null)
-                    break;
+                if (attendanceRecord!=null){
+                    throw new IOException("该文件已经上传过");
+//                    break;
+                }
             }
             i++;
             Relations a = courseService.selectRelationBycId_uId(uId, cId);
