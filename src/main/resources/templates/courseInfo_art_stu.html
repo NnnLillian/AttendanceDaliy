@@ -94,13 +94,6 @@
                     <a th:href="@{'/course/getCourseBySort?cSortId='+${item.getcSortId()}}"
                        th:text="${item.getcSortName()}"></a>
                 </li>
-                <!--<hr>-->
-                <!--<li class="nav nav-header" style="padding-top: 10px;">添加课程信息</li>-->
-                <!--<li data-toggle="modal" data-target="#ModalSort">-->
-                    <!--<a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>课程类别</a>-->
-                <!--</li>-->
-                <!--<li data-toggle="modal" data-target="#Modal">-->
-                    <!--<a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>课程</a></li>-->
             </ul>
         </div>
 
@@ -374,8 +367,8 @@
             stringTime = stringTime.replace(/-/g,"/");
             var timestamp = new Date(stringTime);
             var today = new Date();
-            //  设置为1个月前
-            today.setDate(today.getDate() - 30);
+            //  设置为1个月后
+            today.setDate(today.getDate() + 30);
             if (timestamp.getTime() < today.getTime()){
                 return [
                     '<span style="color: red; font-weight:bold">'+value+'</span>'
@@ -602,6 +595,15 @@
                     });
                 },
             })
+        });
+
+        $("#ModalStu").on('show.bs.modal', function () {
+            console.log("cleaning ModalStu")
+            $("#ADDuName").val("");
+            $("#ADDuId").val("");
+            $("#ADDcNumberLast").val("");
+            $("#ADDoverDate").val("");
+
         });
     });
 </script>

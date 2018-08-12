@@ -718,6 +718,14 @@
                 },
             })
         });
+
+        $("#Modal").on('show.bs.modal', function () {
+            console.log("cleaning Modal");
+            $("#ADDcName").val("");
+            $("#ADDcNumberLast").val("");
+            $("#ADDoverDate").val("");
+            tip.innerHTML = "";
+        });
     });
 </script>
 
@@ -740,10 +748,11 @@
                         type: 'GET',
                         data: {query: query, limit: 10},
                         success: function (result) {
-                            if (result.length == 0) {
-                                tip.innerHTML = "该课程不存在！";
-                            } else {
+                            tip.innerHTML = "";
+                            if (result.length != 0) {
                                 return process(result);
+                            } else {
+                                tip.innerHTML = "  该课程不存在！";
                             }
                         },
 
