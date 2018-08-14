@@ -67,8 +67,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a th:href="@{'/course/getAllcourseSort'}">课程信息</a></li>
                 <li><a th:href="@{'/student/getAllStudentInfo'}">学生信息</a></li>
-                <li><a href="uploadTable.html">签到表上传</a></li>
-                <li><a href="#">帮助</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#help">帮助</a></li>
             </ul>
         </div>
     </div>
@@ -136,6 +135,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger" id="deleteCourse">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--帮助模态框-->
+<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">遇到问题？联系作者</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><h5>电话：+86 150-7480-8385</h5></li>
+                    <li><h5>微信：NnnLillian</h5></li>
+                    <li><h5>邮件：weijingwen35@foxmail.com</h5></li>
+                </ul>
             </div>
         </div>
     </div>

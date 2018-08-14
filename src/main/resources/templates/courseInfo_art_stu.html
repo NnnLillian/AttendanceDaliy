@@ -79,7 +79,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a th:href="@{'/course/getAllcourseSort'}">课程信息</a></li>
                 <li><a th:href="@{'/student/getAllStudentInfo'}">学生信息</a></li>
-                <li><a href="#">帮助</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#help">帮助</a></li>
             </ul>
         </div>
     </div>
@@ -99,6 +99,9 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" th:each="item:${courseInfo}">
                 <h2 class="sub-header" th:text="${item.getcName()}"></h2>
+            <div class="btn-group">
+                <button id="connect" type="button" class="btn btn-default">指纹机</button>
+            </div>
                 <div id="toolbar" class="btn-group dropdown">
                     <!--带下弹框的新增：1.单个学生新增。2. 多个学生新增-->
 
@@ -249,6 +252,26 @@
                 <!--</div>-->
             <!--</div>-->
         <!--</div>-->
+
+        <!--帮助模态框-->
+        <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">遇到问题？联系作者</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li><h5>电话：+86 150-7480-8385</h5></li>
+                            <li><h5>微信：NnnLillian</h5></li>
+                            <li><h5>邮件：weijingwen35@foxmail.com</h5></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
@@ -618,7 +641,7 @@
             swal({
                 title: "请稍等！",
                 text: "正在上传。",
-                timer: 8000,
+                timer: 10000,
                 showConfirmButton: false
             });
             $.ajax({
@@ -642,7 +665,7 @@
                 error: function () {
                     swal({
                         title: "添加失败！",
-                        text: "请等待一段时间后再次尝试!",
+                        text: "1.上传重复文件，请检查。2.后台数据处理未完成，请等待一段时间后再次点击[确认上传]'!",
                         icon: "error",
                         button: "我知道了!",
                     });
@@ -778,6 +801,16 @@
         //     $("#cancleUploadStuMsg").css({display:"none"});
         //
         // });
+
+
+        $('#connect').click(function () {
+            console.log("click connect");
+            $.ajax({
+                type: 'GET',
+                url: "/iclock/cdata?SN=3484162200265&options=all&pushver=2.2.14&language=83",
+                dataType : 'json',
+            });
+        })
 
     });
 </script>
