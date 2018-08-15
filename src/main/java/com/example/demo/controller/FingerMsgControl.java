@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
-import org.apache.catalina.Host;
+import com.example.demo.entity.Relations;
+import com.example.demo.service.CourseService;
+import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -8,17 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import static java.lang.System.out;
-import static jdk.nashorn.internal.runtime.PropertyDescriptor.GET;
-import static org.springframework.http.HttpHeaders.FROM;
-import static org.springframework.http.HttpHeaders.HOST;
 
 
 @Controller
 @RequestMapping("/iclock")
 public class FingerMsgControl {
+
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private StudentService studentService;
 
     //1. 设备启动时，从服务器上读取设备的配置信息
     @GetMapping("/cdata")
@@ -28,9 +33,6 @@ public class FingerMsgControl {
                              @RequestParam("language") int language,
                              HttpServletRequest request,
                              HttpServletResponse response){
-//                             HttpServletResponse response) throws IOException {
-//        SN = "3485162300120";
-//        language = 83;
         try {
             out.println("Msg is running");
             out.println(SN);
@@ -84,5 +86,77 @@ public class FingerMsgControl {
         }
 
 
+    }
+
+
+
+//    4. 上传考勤信息
+    @RequestMapping(value = "/cdata", method = RequestMethod.POST)
+    public @ResponseBody
+    HttpServletResponse getAttendance(@RequestParam("SN") String SN,
+                         @RequestParam("table") String table,
+                         @RequestParam("Stamp") String Stamp,
+                         @RequestBody String attLog,
+                         HttpServletRequest request,
+                         HttpServletResponse response){
+        try{
+            System.out.println("getAttendance is running");
+            System.out.println(SN);
+            System.out.println(attLog);
+            String line[] = attLog.split("\n");
+            int length = line.length;
+            int cId=0;
+            char SerialNumber = SN.charAt(12);
+            switch (SerialNumber){
+                case '5' :
+                    cId = 1;
+                    break;
+            }
+            int i = 0;
+            System.out.println(cId);
+            while (i < length){
+//                System.out.println(line[i-1]);
+                String thisLine = line[i];
+                String item[]=thisLine.split("\t");
+                String pin = item[0];
+                int uId = Integer.parseInt(pin);
+                String time = item[1];
+                Timestamp arriveTime = Timestamp.valueOf(time);
+                i++;
+                Relations a = courseService.selectRelationBycId_uId(uId, cId);
+                int id = a.getId();
+                int cNumberLast = a.getcNumberLast();
+                cNumberLast = cNumberLast - 1;
+                courseService.updateCourseNumber(id, cNumberLast);
+                // 将签到数据写入数据库
+                Timestamp leaveTime = null;
+                String attComment = null;
+                studentService.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+            }
+
+            // HTTP响应头域
+            String host = request.getHeader("Host");
+            response.addHeader("Host", host);
+            // 返回时间
+            response.addHeader("Date", new Date().toString());
+            // 设置内容类型
+            response.addHeader("Content-Type", "text/plain");
+            // 返回长度
+            response.addHeader("Content-Length", "4");
+
+            // 返回成功处理的记录条数
+            String rec = "OK:";
+            rec += String.valueOf(length);
+            response.getOutputStream().write(rec.getBytes());
+            out.flush();
+            out.close();
+            response.flushBuffer();
+
+            return response;
+
+        }catch (IOException e) {
+            e.printStackTrace();
+            return response;
+        }
     }
 }
