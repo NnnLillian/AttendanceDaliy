@@ -25,8 +25,11 @@ class WebConfigurer extends WebMvcConfigurerAdapter {
 	//映射路径，把输入的路径映射到相应的文件夹下
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/imgs/**").addResourceLocations("classpath:/imgs/");
-		registry.addResourceHandler("/folders/**").addResourceLocations("classpath:/folders/");
+		registry.addResourceHandler("/img/**").addResourceLocations("classpath:/imgs/");
+//		registry.addResourceHandler("/folders/**").addResourceLocations("classpath:/folders/");
+		registry.addResourceHandler("/imgs/**").addResourceLocations("file:/root/java/imgs/");
+		registry.addResourceHandler("/folders/**").addResourceLocations("file:/root/java/folders/");
+		super.addResourceHandlers(registry);
 	}
 
 }
