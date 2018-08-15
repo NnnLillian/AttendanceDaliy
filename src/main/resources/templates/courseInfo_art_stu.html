@@ -99,9 +99,6 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" th:each="item:${courseInfo}">
                 <h2 class="sub-header" th:text="${item.getcName()}"></h2>
-            <div class="btn-group">
-                <button id="connect" type="button" class="btn btn-default">指纹机</button>
-            </div>
                 <div id="toolbar" class="btn-group dropdown">
                     <!--带下弹框的新增：1.单个学生新增。2. 多个学生新增-->
 
@@ -801,16 +798,6 @@
         //     $("#cancleUploadStuMsg").css({display:"none"});
         //
         // });
-
-
-        $('#connect').click(function () {
-            console.log("click connect");
-            $.ajax({
-                type: 'GET',
-                url: "/iclock/cdata?SN=3484162200265&options=all&pushver=2.2.14&language=83",
-                dataType : 'json',
-            });
-        })
 
     });
 </script>
