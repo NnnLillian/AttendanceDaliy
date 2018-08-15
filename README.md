@@ -8,7 +8,9 @@
 - 查询一定时间范围内的签到信息。参考链接：[BootStrap Table时间查询][2]
 - 使用监听器--提醒课时数少于三节课和课程日期快到的学生（listener类已经建好）
 - 将“Help Modal”完善，可以直接拨打电话或者打开邮箱。
-- 发送短信更换成为【阿里云信息】发送。参考链接[Springboot - 接入阿里云短信服务][3]<br>[Springboot实现阿里云通信短信服务有关短信验证码的发送][4]
+- 发送短信更换成为【阿里云信息】发送。
+ - 参考链接：[Springboot - 接入阿里云短信服务][3]
+ - 参考链接：[Springboot实现阿里云通信短信服务有关短信验证码的发送][4]
 
 
 [1]: https://blog.csdn.net/zhengxiangwen/article/details/68484857
