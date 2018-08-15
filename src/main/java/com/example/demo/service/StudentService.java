@@ -52,7 +52,7 @@ public interface StudentService {
 
     List<relationTableSearchResultItem> orderStudentByCourseNumber(int cId, String sort, String order, int offset, int limit);
 
-    void sendMessage(String cName, String uConnect);
+    void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast);
 
 
 
@@ -76,4 +76,5 @@ public interface StudentService {
 
     int deleteOneRecord(int attId);
 
+//    ######################################################################################
 }

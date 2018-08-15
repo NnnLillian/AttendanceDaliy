@@ -158,8 +158,9 @@ public class StudentServiceimpl implements StudentService{
         return studentInfoMapper.orderStudentByCourseNumber(cId, sort,order,offset,limit);
     }
 
+    // ##############################################################################
     @Override
-    public void sendMessage(String cName, String uConnect){
+    public void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast){
 
         final String url="http://47.98.207.80:8888/sms.aspx";
 
@@ -184,7 +185,7 @@ public class StudentServiceimpl implements StudentService{
             query+="account=艺术培训" + "&";
             query+="password=123456" + "&";
             query+="mobile="+ uConnect + "&";
-            query+="content=【艺术培训】您好，您的"+ cName + "课时已经不足3节，请尽快补交学费。" + "&";
+            query+="content=【兰州斯渊艺术】您好，"+ uName +"同学于"+ attTime +"开始"+ cName + "课程。剩余课时:"+ cNumberLast + "节(该数据仅供参考，实际上课情况以学校签到记录为准)如有疑问可与我们联系。" + "&";
             query+="sendTime=" + "&";
             query+="extno=";
 

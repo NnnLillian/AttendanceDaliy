@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Relations;
+import com.example.demo.entity.StudentInfo;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,15 +124,22 @@ public class FingerMsgControl {
                 String time = item[1];
                 Timestamp arriveTime = Timestamp.valueOf(time);
                 i++;
+                // 将签到数据写入数据库
+                Timestamp leaveTime = null;
+                String attComment = null;
+                studentService.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+                // 给学生减少课时
                 Relations a = courseService.selectRelationBycId_uId(uId, cId);
                 int id = a.getId();
                 int cNumberLast = a.getcNumberLast();
                 cNumberLast = cNumberLast - 1;
                 courseService.updateCourseNumber(id, cNumberLast);
-                // 将签到数据写入数据库
-                Timestamp leaveTime = null;
-                String attComment = null;
-                studentService.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
+                // 给家长发送短信
+                StudentInfo oneStudent = studentService.selectStudentById(uId);
+                String uName = oneStudent.getuName();
+                String uConnect = oneStudent.getuConnect();
+                String cName = courseService.selectCourseInfoById(cId).getcName();
+                studentService.sendMessage(cName,uConnect,uName,time,cNumberLast);
             }
 
             // HTTP响应头域
