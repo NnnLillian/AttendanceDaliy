@@ -45,7 +45,7 @@ public class FingerMsgControl {
             //  正常联网时客户端联接服务器的间隔时间
             rec += "Delay=30" + "\n";
             //  客户端定时检查并传送新数据时间
-            rec += "TransTimes=00:00;14:00" + "\n";
+            rec += "TransTimes=00:00;12:00" + "\n";
             //  客户端检查并传送新数据间隔时间(分钟)
             rec += "TransInterval=1" + "\n";
             //  客户端向服务器自动上传哪些数据的标识
@@ -124,15 +124,21 @@ public class FingerMsgControl {
                 String time = item[1];
                 Timestamp arriveTime = Timestamp.valueOf(time);
                 i++;
+                // 检查该学生是否选择这门课，若没有选择，则忽略该条打卡信息
+                Relations a = courseService.selectRelationBycId_uId(uId, cId);
+                if (a == null){
+                    continue;
+                }
                 // 将签到数据写入数据库
                 Timestamp leaveTime = null;
                 String attComment = null;
                 studentService.insertAttendance(uId, cId, arriveTime, leaveTime, attComment);
-                // 给学生减少课时
-                Relations a = courseService.selectRelationBycId_uId(uId, cId);
+                // 给学生减少Last课时并增加ed
                 int id = a.getId();
                 int cNumberLast = a.getcNumberLast();
+                int cNumberEd = a.getcNumberEd();
                 cNumberLast = cNumberLast - 1;
+                cNumberEd = cNumberEd + 1;
                 courseService.updateCourseNumber(id, cNumberLast);
                 // 给家长发送短信
                 StudentInfo oneStudent = studentService.selectStudentById(uId);
