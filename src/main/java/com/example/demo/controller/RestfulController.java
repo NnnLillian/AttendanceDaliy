@@ -485,9 +485,14 @@ public class RestfulController {
             }
             i++;
             Relations a = courseService.selectRelationBycId_uId(uId, cId);
+            if (a == null){
+                continue;
+            }
             int id = a.getId();
             int cNumberLast = a.getcNumberLast();
+            int cNumberEd = a.getcNumberEd();
             cNumberLast = cNumberLast - 1;
+            cNumberEd = cNumberEd + 1;
             courseService.updateCourseNumber(id, cNumberLast);
             // 将签到数据写入数据库
             Timestamp leaveTime = null;
@@ -545,7 +550,7 @@ public class RestfulController {
         }
 
         attendances = studentService.selectAttendancePageByUid_Cid(uId,cId,offset,limit);
-        System.out.println(attendances.get(0).getArriveTime());
+//        System.out.println(attendances.get(0).getArriveTime());
         int total = studentService.selectPageAttendanceCount(uId,cId);
         result.setTotal(total);
         result.setRows(attendances);
