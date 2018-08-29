@@ -52,8 +52,8 @@ public class FingerMsgControl {
         //        rec += "TransFlag=1000000000"+"\n";
             rec += "TransFlag=TransData" + "\t" + "AttLog" + "\n";
             rec += "TimeZone=8" + "\n";
-            //  客户端实时传送新记录
-            rec += "Realtime=0" + "\n";
+            //  客户端实时传送新记录为1表示有新数据就传送到服务器，为0 表示按照 TransTimes 和 TransInterval 规定的时间传送
+            rec += "Realtime=1" + "\n";
             //  是否加密传送数据，保留未使用
             rec += "Encrypt=None" + "\n";
             //  服务器支持的协议版本号及时间
@@ -110,7 +110,7 @@ public class FingerMsgControl {
             char SerialNumber = SN.charAt(12);
             switch (SerialNumber){
                 case '5' :
-                    cId = 1;
+                    cId = 2;
                     break;
             }
             int i = 0;
@@ -140,6 +140,7 @@ public class FingerMsgControl {
                 cNumberLast = cNumberLast - 1;
                 cNumberEd = cNumberEd + 1;
                 courseService.updateCourseNumber(id, cNumberLast);
+                courseService.updateCoursedNumber(id,cNumberEd);
                 // 给家长发送短信
                 StudentInfo oneStudent = studentService.selectStudentById(uId);
                 String uName = oneStudent.getuName();

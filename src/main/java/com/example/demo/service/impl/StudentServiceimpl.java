@@ -185,7 +185,7 @@ public class StudentServiceimpl implements StudentService{
             query+="account=艺术培训" + "&";
             query+="password=123456" + "&";
             query+="mobile="+ uConnect + "&";
-            query+="content=【兰州斯渊艺术】您好，"+ uName +"同学于"+ attTime +"开始"+ cName + "课程。剩余课时:"+ cNumberLast + "节(该数据仅供参考，实际上课情况以学校签到记录为准)如有疑问可与我们联系。" + "&";
+            query+="content=【兰州斯渊艺术】您好，"+ uName +"同学于"+ attTime +"开始课程。(实际上课情况以学校签到记录为准)如有疑问可与我们联系。" + "&";
             query+="sendTime=" + "&";
             query+="extno=";
 

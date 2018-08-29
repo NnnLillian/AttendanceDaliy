@@ -494,6 +494,7 @@ public class RestfulController {
             cNumberLast = cNumberLast - 1;
             cNumberEd = cNumberEd + 1;
             courseService.updateCourseNumber(id, cNumberLast);
+            courseService.updateCoursedNumber(id,cNumberEd);
             // 将签到数据写入数据库
             Timestamp leaveTime = null;
             String attComment = null;
