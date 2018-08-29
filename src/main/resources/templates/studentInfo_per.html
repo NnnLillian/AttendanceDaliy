@@ -633,6 +633,22 @@
                 if (!$.trim(value)) {
                     return '不能为空';
                 }
+            },
+            success:function(){
+                $.globalMessenger().post({
+                    message: "修改成功! ",
+                    hideAfter: 3,
+                    type: 'success',
+                    showCloseButton: true
+                });
+            },
+            error:function(){
+                $.globalMessenger().post({
+                    message: "修改失败! ",
+                    hideAfter: 3,
+                    type: 'error',
+                    showCloseButton: true
+                });
             }
         });
 
@@ -654,6 +670,22 @@
                 if (!(/^1[34578]\d{9}$/.test(value))) {
                     return '手机号码有误，请重填';
                 }
+            },
+            success:function(){
+                $.globalMessenger().post({
+                    message: "修改成功! ",
+                    hideAfter: 3,
+                    type: 'success',
+                    showCloseButton: true
+                });
+            },
+            error:function(){
+                $.globalMessenger().post({
+                    message: "修改失败! ",
+                    hideAfter: 3,
+                    type: 'error',
+                    showCloseButton: true
+                });
             }
         });
     });
@@ -667,6 +699,22 @@
             disabled: false,             //是否禁用编辑
             emptytext: "备注",          //空值的默认文本
             mode: "popup",              //编辑框的模式：支持popup和inline两种模式，默认是popup
+            success:function(){
+                $.globalMessenger().post({
+                    message: "修改成功! ",
+                    hideAfter: 3,
+                    type: 'success',
+                    showCloseButton: true
+                });
+            },
+            error:function(){
+                $.globalMessenger().post({
+                    message: "修改失败! ",
+                    hideAfter: 3,
+                    type: 'error',
+                    showCloseButton: true
+                });
+            }
         });
 
     });
