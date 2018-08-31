@@ -160,7 +160,7 @@ public class StudentServiceimpl implements StudentService{
 
     // ##############################################################################
     @Override
-    public void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast){
+    public void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast, Date overDate){
 
         final String url="http://47.98.207.80:8888/sms.aspx";
 
@@ -185,7 +185,11 @@ public class StudentServiceimpl implements StudentService{
             query+="account=艺术培训" + "&";
             query+="password=123456" + "&";
             query+="mobile="+ uConnect + "&";
-            query+="content=【兰州斯渊艺术】您好，"+ uName +"同学于"+ attTime +"开始课程。(实际上课情况以学校签到记录为准)如有疑问可与我们联系。" + "&";
+            if(cNumberLast < 50) {
+                query += "content=【兰州斯渊艺术】您好，" + uName + "同学于" + attTime + "开始课程。剩余课程:" + cNumberLast + "节。(请合理安排时间)电话：4679789" + "&";
+            }else {
+                query += "content=【兰州斯渊艺术】您好，" + uName + "同学于" + attTime + "开始课程。课程截止日期为:" + overDate + "电话：4679789" + "&";
+            }
             query+="sendTime=" + "&";
             query+="extno=";
 

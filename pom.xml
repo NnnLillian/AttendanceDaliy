@@ -88,12 +88,20 @@
 			<artifactId>jxl</artifactId>
 			<version>2.6.12</version>
 		</dependency>
+		<!-- 解决在实体Bean中大量的Getter/Setter方法 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+			<version>1.16.16</version>
+		</dependency>
 
 
 
 	</dependencies>
 
 	<build>
+		<finalName>AttendanceDaily</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -101,6 +109,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<!--生成可执行半杯，里程碑构建-->
+	<repositories>
+		<repository>
+			<id>spring-milestone</id>
+			<url>http://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
+
 
 
 

@@ -52,7 +52,7 @@ public interface StudentService {
 
     List<relationTableSearchResultItem> orderStudentByCourseNumber(int cId, String sort, String order, int offset, int limit);
 
-    void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast);
+    void sendMessage(String cName, String uConnect, String uName, String attTime, int cNumberLast, Date overDate);
 
 
 

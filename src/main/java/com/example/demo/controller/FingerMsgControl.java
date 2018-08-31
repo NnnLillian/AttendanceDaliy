@@ -146,7 +146,8 @@ public class FingerMsgControl {
                 String uName = oneStudent.getuName();
                 String uConnect = oneStudent.getuConnect();
                 String cName = courseService.selectCourseInfoById(cId).getcName();
-                studentService.sendMessage(cName,uConnect,uName,time,cNumberLast);
+                Date overDate = a.getOverDate();
+                studentService.sendMessage(cName,uConnect,uName,time,cNumberLast,overDate);
             }
 
             // HTTP响应头域
